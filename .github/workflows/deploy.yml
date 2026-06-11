@@ -1,0 +1,65 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: HTML well-formedness and link audit
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          import sys
+          class P(HTMLParser):
+              def error(self, m): sys.exit(f"parse error: {m}")
+          P().feed(open("index.html").read())
+          html = open("index.html").read()
+          assert "hachure-org/spec" in html, "spec link missing"
+          assert "npm i -D hachure" in html, "npm install missing"
+          assert "STATUS_FUNCTION_VERSION" not in html, "stale constant casing"
+          assert html.count("kontourai/surface") == 1, "reference impl must appear exactly once"
+          print("validation passed")
+          PY
+
+  deploy:
+    name: Deploy to Cloudflare Pages
+    runs-on: ubuntu-latest
+    needs: verify
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v6
+      - name: Deploy
+        run: npx -y wrangler@4 pages deploy . --project-name=hachure-org --branch=main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+  smoke:
+    name: Smoke Test
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Canonical serves
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://hachure.org/)
+          echo "hachure.org → $STATUS"; [ "$STATUS" = "200" ] || exit 1
+      - name: dev redirects to org
+        run: |
+          LOCATION=$(curl -s -o /dev/null -w "%{redirect_url}" https://hachure.dev/)
+          echo "hachure.dev → $LOCATION"
+          echo "$LOCATION" | grep -q "hachure.org" || exit 1
