@@ -31,6 +31,7 @@
   --gutter:       clamp(1.5rem, 5vw, 4rem);
   --col-text:     68ch;
   --radius:       2px;
+  --sticky-header-offset: 7rem;
 
   /* Thin rules */
   --rule:         1px solid var(--ink-faint);
@@ -49,6 +50,7 @@ html {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
+  scroll-padding-top: var(--sticky-header-offset);
 }
 
 body {
@@ -97,7 +99,14 @@ body::after {
    ============================================================ */
 
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: 80;
   padding-block: 2rem 1.5rem;
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(ellipse at 20% 80%, rgba(180,160,100,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(160,140,80,0.04) 0%, transparent 60%);
   border-bottom: var(--rule);
   display: flex;
   align-items: baseline;
@@ -842,6 +851,10 @@ body::after {
    ============================================================ */
 
 @media (max-width: 900px) {
+  :root {
+    --sticky-header-offset: 8.5rem;
+  }
+
   .hero-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -882,7 +895,37 @@ body::after {
 }
 
 @media (max-width: 600px) {
+  :root {
+    --sticky-header-offset: 7rem;
+  }
+
   body::before, body::after { display: none; }
+
+  .site-header {
+    padding-block: 1rem 0.9rem;
+  }
+
+  .site-nav {
+    flex-wrap: nowrap;
+    gap: 1rem;
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    scrollbar-color: var(--ink-faint) transparent;
+    scrollbar-width: thin;
+  }
+
+  .site-nav::-webkit-scrollbar {
+    height: 3px;
+  }
+
+  .site-nav::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .site-nav::-webkit-scrollbar-thumb {
+    background: var(--ink-faint);
+  }
 
   .status-footer-grid {
     grid-template-columns: 1fr;
