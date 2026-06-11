@@ -59,6 +59,7 @@
             Namespace <code>hachure.org/v1</code>
             &nbsp;·&nbsp; pre-1.0, hard versioning
             &nbsp;·&nbsp; <a href="https://github.com/hachure-org/spec" target="_blank" rel="noopener noreferrer">Spec on GitHub ↗</a>
+            &nbsp;·&nbsp; <a href="https://www.npmjs.com/package/hachure" target="_blank" rel="noopener noreferrer"><code>npm i -D hachure</code> ↗</a>
           </p>
         </div>
 
@@ -156,7 +157,7 @@
           </p>
 
           <div class="status-formula">
-            <span class="formula-label">Status Derivation — <code>STATUS_FUNCTION_VERSION = "1"</code></span>
+            <span class="formula-label">Status Derivation — <code>statusFunctionVersion = "1"</code></span>
             <code>status = f(claim, evidence, events, policy, authority, now)</code>
           </div>
 
@@ -231,14 +232,13 @@
           <div class="mono-note" role="note">
             Namespace: <strong>hachure.org/v1</strong><br />
             schemaVersion: <strong>3</strong><br />
-            STATUS_FUNCTION_VERSION: <strong>"1"</strong><br />
-            Reference impl: <strong>@kontourai/surface</strong>
+            statusFunctionVersion: <strong>"1"</strong>
           </div>
 
           <p style="margin-top: 1.25rem; font-size: 0.83rem; color: var(--ink-light); line-height: 1.65;">
             Pre-1.0: hard breaking changes rather than compatibility aliases. No forward or backward compatibility
             guarantees across versions. Version bumps are reflected in <code>schemaVersion</code>
-            and in <code>STATUS_FUNCTION_VERSION</code>.
+            and in <code>statusFunctionVersion</code>.
           </p>
         </aside>
 
@@ -453,7 +453,7 @@
             <p>
               Namespace <code>hachure.org/v1</code> · Hard versioning, no compatibility promises yet.
               Version bumps are reflected in <code>schemaVersion</code> (currently <code>3</code>)
-              and in <code>STATUS_FUNCTION_VERSION</code> (currently <code>"1"</code>).
+              and in <code>statusFunctionVersion</code> (currently <code>"1"</code>).
             </p>
           </div>
         </div>
@@ -462,15 +462,15 @@
           <p class="footer-col-title">Specification &amp; Implementation</p>
           <div class="footer-col-body">
             <p>
-              Spec and reference implementation at
-              <a href="https://github.com/kontourai/surface" target="_blank" rel="noopener noreferrer">
-                github.com/kontourai/surface ↗
+              Specification at
+              <a href="https://github.com/hachure-org/spec" target="_blank" rel="noopener noreferrer">
+                github.com/hachure-org/spec ↗
               </a>
-              — <code>spec/</code> directory for now. Reference implementation: <code>@kontourai/surface</code>.
+              — prose, normative JSON schemas, and conformance test vectors.
             </p>
             <p>
-              Conformance test vectors in <code>spec/conformance/</code> make the specification executable.
-              An independent implementation can prove agreement without touching any Kontour product.
+              npm package: <a href="https://www.npmjs.com/package/hachure" target="_blank" rel="noopener noreferrer"><code>npm i -D hachure</code> ↗</a>
+              — schemas and conformance test vectors. Run the test vectors against any implementation to prove agreement.
             </p>
           </div>
         </div>
