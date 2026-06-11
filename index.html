@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hachure — An Open Trust Format</title>
+  <meta name="description" content="Hachure is an open format for portable trust state. Assert claims. Observe evidence, append-only. Resolve any question — with receipts, or an honest admission of none." />
+  <meta property="og:title" content="Hachure — An Open Trust Format" />
+  <meta property="og:description" content="Status is a pure, versioned function: deterministic, recomputable by anyone. Namespace hachure.org/v1." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://hachure.org/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Hachure — An Open Trust Format" />
+  <meta name="twitter:description" content="Assert. Observe. Resolve. Status = f(claim, evidence, events, policy, authority, now)." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <header class="site-header site-wrapper" role="banner">
+    <a class="site-wordmark" href="/" aria-label="Hachure home">
+      Hachure<span aria-hidden="true">·</span>org
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="#verbs">§ Verbs</a>
+      <a href="#recompute">§ Recompute</a>
+      <a href="#records">§ Records</a>
+      <a href="#interop">§ Interop</a>
+      <a href="https://github.com/kontourai/surface" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <main>
+    <section class="hero site-wrapper" aria-labelledby="hero-heading">
+
+      <div class="hero-grid">
+
+        <!-- Left: text -->
+        <div class="hero-text">
+          <p class="plate-label" aria-hidden="true">Plate&nbsp;I &nbsp;·&nbsp; hachure.org/v1</p>
+
+          <h1 class="hero-heading" id="hero-heading">Hachure</h1>
+
+          <p class="hero-subhead">An open trust format.</p>
+
+          <p class="hero-definition">
+            Hachures are the short strokes on hand-drawn maps that show the shape and steepness of terrain.
+            This format does the same for trust: it shows the <strong>contours of what is supported,
+            what is stale, what is disputed,</strong> and what is simply asserted.
+          </p>
+
+          <p class="hero-namespace">
+            Namespace <code>hachure.org/v1</code>
+            &nbsp;·&nbsp; pre-1.0, hard versioning
+            &nbsp;·&nbsp; <a href="https://github.com/kontourai/surface" target="_blank" rel="noopener noreferrer">Spec on GitHub ↗</a>
+          </p>
+        </div>
+
+        <!-- Right: hachure illustration -->
+        <div class="hero-illustration" aria-hidden="true">
+          <img src="/hachure-ridge.svg"
+               alt="Hachure strokes showing the contour and steepness of a ridge, in the manner of 19th-century survey maps."
+               width="800"
+               height="320" />
+        </div>
+
+      </div>
+
+      <hr class="hero-rule" aria-hidden="true" />
+
+    </section>
+
+    <!-- ============================================================
+         §1 — THE THREE VERBS
+         ============================================================ -->
+    <section class="section site-wrapper reveal" id="verbs" aria-labelledby="verbs-heading">
+
+      <p class="section-label">
+        <span class="section-number">§ 1</span>
+        The Three Verbs
+      </p>
+      <h2 class="section-title" id="verbs-heading">Assert. Observe. Resolve.</h2>
+
+      <p class="section-body">
+        Every implementation of Hachure is an implementation of three verbs over one ledger.
+        The discipline holding all three together: nothing inside the trust layer silently decides.
+        Models may propose, and proposals are records.
+      </p>
+
+      <div class="verbs-grid" role="list">
+
+        <article class="verb-card" role="listitem">
+          <span class="verb-number">Verb I</span>
+          <h3 class="verb-name"><em>Assert</em></h3>
+          <p class="verb-desc">
+            Say what you believe, on the record.
+            Claims registered with subject, value, and impact.
+            A Claim has a stable <code>id</code>, a <code>subjectType</code> / <code>subjectId</code> pair,
+            a <code>claimType</code>, a <code>fieldOrBehavior</code>, and a <code>value</code>.
+            Derived trust status is never stored on the claim; it is computed from the surrounding bundle at evaluation time.
+          </p>
+        </article>
+
+        <article class="verb-card" role="listitem">
+          <span class="verb-number">Verb II</span>
+          <h3 class="verb-name"><em>Observe</em></h3>
+          <p class="verb-desc">
+            Attach what actually happened, append-only.
+            Evidence, verification events, attestations, testimony that never mutates.
+            Events accumulate as a ledger; the most recent event of a given kind shapes derived status.
+            A non-passing blocking evidence item surfaces a <code>disputed</code> outcome.
+          </p>
+        </article>
+
+        <article class="verb-card" role="listitem">
+          <span class="verb-number">Verb III</span>
+          <h3 class="verb-name"><em>Resolve</em></h3>
+          <p class="verb-desc">
+            Ask anything; every answer comes with receipts or admits it has none.
+            Inquiries match a claim directly, derive through a named rule, or honestly report the gap.
+            An <code>InquiryRecord</code> carries the original question, the resolution path, the answer with status,
+            and the <code>statusFunctionVersion</code> used — enabling re-evaluation if the algorithm changes.
+          </p>
+        </article>
+
+      </div>
+
+    </section>
+
+    <!-- ============================================================
+         §2 — RECOMPUTE IT YOURSELF
+         ============================================================ -->
+    <section class="section site-wrapper reveal" id="recompute" aria-labelledby="recompute-heading">
+
+      <p class="section-label">
+        <span class="section-number">§ 2</span>
+        Recompute It Yourself
+      </p>
+      <h2 class="section-title" id="recompute-heading">Status is a pure function.<br>Run it yourself.</h2>
+
+      <div class="recompute-layout">
+
+        <!-- Left: formula + status table -->
+        <div>
+          <p class="section-body">
+            Status in Hachure is a pure, versioned, deterministic function of the bundle data and a
+            <code>now</code> timestamp. The same inputs and the same version must produce the same status
+            in any conforming implementation. Asking you to trust a dashboard is not the same thing as
+            publishing the function.
+          </p>
+
+          <div class="status-formula">
+            <span class="formula-label">Status Derivation — <code>STATUS_FUNCTION_VERSION = "1"</code></span>
+            <code>status = f(claim, evidence, events, policy, authority, now)</code>
+          </div>
+
+          <p class="section-body">
+            <code>now</code> is an explicit argument so point-in-time views are reproducible without
+            clock-tick events or background expiry. This is the same move transparency logs made for
+            certificates and Sigstore made for builds, applied to claims about work.
+          </p>
+
+          <div class="status-list" aria-label="Eight possible status values">
+            <p class="status-list-title">Eight possible statuses</p>
+            <table class="status-table">
+              <tbody>
+                <tr>
+                  <td><span class="status-dot dot-unknown" aria-hidden="true"></span><code>unknown</code></td>
+                  <td>No supporting evidence or events; the claim cannot be evaluated.</td>
+                </tr>
+                <tr>
+                  <td><span class="status-dot dot-proposed" aria-hidden="true"></span><code>proposed</code></td>
+                  <td>Evidence exists or a verification event indicates proposed, but policy requirements are not fully met.</td>
+                </tr>
+                <tr>
+                  <td><span class="status-dot dot-assumed" aria-hidden="true"></span><code>assumed</code></td>
+                  <td>Treated as true for operational purposes without full verification evidence.</td>
+                </tr>
+                <tr>
+                  <td><span class="status-dot dot-verified" aria-hidden="true"></span><code>verified</code></td>
+                  <td>Required policy evidence present; verification event asserts verified and is still fresh.</td>
+                </tr>
+                <tr>
+                  <td><span class="status-dot dot-stale" aria-hidden="true"></span><code>stale</code></td>
+                  <td>The most recent verified event has expired under the policy's validity rule.</td>
+                </tr>
+                <tr>
+                  <td><span class="status-dot dot-disputed" aria-hidden="true"></span><code>disputed</code></td>
+                  <td>Blocking contradicting evidence exists, or a terminal dispute event has been recorded.</td>
+                </tr>
+                <tr>
+                  <td><span class="status-dot dot-superseded" aria-hidden="true"></span><code>superseded</code></td>
+                  <td>A terminal event marks the claim as superseded.</td>
+                </tr>
+                <tr>
+                  <td><span class="status-dot dot-rejected" aria-hidden="true"></span><code>rejected</code></td>
+                  <td>A terminal event marks the claim as rejected.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right: conformance aside -->
+        <aside class="conformance-aside" aria-label="Conformance information">
+          <h3>The spec is executable.</h3>
+
+          <p>
+            <code>spec/conformance/</code> contains test vector bundles with expected per-claim statuses
+            at a fixed <code>now</code>, covering commit-scoped verification, duration-based staleness,
+            blocking-evidence disputes, and authority-gated resolution.
+          </p>
+
+          <p>
+            The test at <code>tests/spec-conformance.test.ts</code> loads every test vector and asserts
+            that the reference implementation derives the expected statuses. An independent implementation
+            can run the same test vectors without touching any Kontour product.
+          </p>
+
+          <p>
+            Conformance test vectors make the specification executable.
+            Any implementation can prove agreement.
+          </p>
+
+          <div class="mono-note" role="note">
+            Namespace: <strong>hachure.org/v1</strong><br />
+            schemaVersion: <strong>3</strong><br />
+            STATUS_FUNCTION_VERSION: <strong>"1"</strong><br />
+            Reference impl: <strong>@kontourai/surface</strong>
+          </div>
+
+          <p style="margin-top: 1.25rem; font-size: 0.83rem; color: var(--ink-light); line-height: 1.65;">
+            Pre-1.0: hard breaking changes rather than compatibility aliases. No forward or backward compatibility
+            guarantees across versions. Version bumps are reflected in <code>schemaVersion</code>
+            and in <code>STATUS_FUNCTION_VERSION</code>.
+          </p>
+        </aside>
+
+      </div>
+
+    </section>
+
+    <!-- ============================================================
+         §3 — CORE RECORDS
+         ============================================================ -->
+    <section class="section site-wrapper reveal" id="records" aria-labelledby="records-heading">
+
+      <p class="section-label">
+        <span class="section-number">§ 3</span>
+        Core Record Shapes
+      </p>
+      <h2 class="section-title" id="records-heading">First-class concepts.<br>No producer required.</h2>
+
+      <p class="records-intro">
+        Hachure defines these record types. Each is a first-class concept in the format;
+        none requires a specific producer or product to instantiate.
+        Normative JSON schemas are the wire contracts.
+      </p>
+
+      <div class="records-strip" role="list">
+
+        <article class="record-item" role="listitem">
+          <p class="record-name">TrustBundle</p>
+          <p class="record-desc">
+            The central wire record. A portable, point-in-time package of trust state from a single producer:
+            claims, evidence, policies, verification events, and optional identity links, claim groups, and authority traces.
+            Bundles from multiple producers can be merged; conflicts surface as <code>disputed</code> status — never last-write-wins.
+          </p>
+        </article>
+
+        <article class="record-item" role="listitem">
+          <p class="record-name">Claim</p>
+          <p class="record-desc">
+            An assertion about a real-world subject. Stable <code>id</code>, <code>subjectType</code> / <code>subjectId</code>,
+            <code>claimType</code>, <code>fieldOrBehavior</code>, <code>value</code>.
+            Carries optional <code>impactLevel</code>, integrity anchors, policy references, and derivation edges.
+          </p>
+        </article>
+
+        <article class="record-item" role="listitem">
+          <p class="record-name">Evidence</p>
+          <p class="record-desc">
+            An item of support for a claim, linked via <code>claimId</code>.
+            Carries <code>evidenceType</code>, <code>method</code>, <code>sourceRef</code>, excerpt, and <code>observedAt</code>.
+            <code>supportStrength: "entails"</code> feeds policy checks; <code>"cited"</code> is contextual only.
+          </p>
+        </article>
+
+        <article class="record-item" role="listitem">
+          <p class="record-name">VerificationEvent</p>
+          <p class="record-desc">
+            An append-only event representing a status decision for a claim.
+            Events are never updated; they accumulate as a ledger.
+            The most recent event of a given kind shapes derived status via the status-function fold.
+          </p>
+        </article>
+
+        <article class="record-item" role="listitem">
+          <p class="record-name">AuthorityTrace</p>
+          <p class="record-desc">
+            A record establishing that a named actor held a named authority over a subject during a time window.
+            The credential that makes a dispute-resolution event binding: the fold checks that the resolution
+            event's actor has an active trace at the decision timestamp.
+          </p>
+        </article>
+
+        <article class="record-item" role="listitem">
+          <p class="record-name">InquiryRecord</p>
+          <p class="record-desc">
+            An append-only record capturing the resolution of a consumer-side question against the ledger.
+            Carries the original question, resolution path, answer with status, frozen snapshot of input claim statuses,
+            and <code>statusFunctionVersion</code>. Records never go stale — they assert what was knowable at a specific moment.
+          </p>
+        </article>
+
+        <article class="record-item" role="listitem">
+          <p class="record-name">DerivationRule</p>
+          <p class="record-desc">
+            A named, versioned rule that derives a boolean answer from existing claims.
+            Composes claims using value predicates (<code>eq</code>, <code>gt</code>, <code>in</code>, <code>exists</code>)
+            and status predicates, combined with <code>"all"</code> or <code>"any"</code>.
+            Weakest-link confidence ceiling propagates through rule evaluation unchanged.
+          </p>
+        </article>
+
+        <article class="record-item" role="listitem">
+          <p class="record-name">VerificationPolicy</p>
+          <p class="record-desc">
+            Declares what evidence and methods are required to reach <code>verified</code> status for a given
+            <code>claimType</code>, and how long verification remains valid.
+            <code>validityRule</code>: one of <code>duration</code>, <code>commit</code>, <code>historical</code>, <code>manual</code>.
+          </p>
+        </article>
+
+      </div>
+
+    </section>
+
+    <!-- ============================================================
+         §4 — PLAYS NICELY
+         ============================================================ -->
+    <section class="section site-wrapper reveal" id="interop" aria-labelledby="interop-heading">
+
+      <p class="section-label">
+        <span class="section-number">§ 4</span>
+        Interoperability
+      </p>
+      <h2 class="section-title" id="interop-heading">Plays nicely.<br>Invents nothing.</h2>
+
+      <p class="interop-intro">
+        Hachure consumes and emits from existing standards as evidence.
+        It invents no envelope, log, or identity scheme.
+        The existing signing and attestation stacks do their job;
+        Hachure adds the semantics above the signature — claims that evolve over time,
+        a status function anyone can recompute, and authority-gated contestation that can change an outcome without mutating history.
+      </p>
+
+      <div class="interop-grid" role="list">
+
+        <article class="interop-item" role="listitem">
+          <span class="interop-standard">in-toto + DSSE</span>
+          <p class="interop-role">
+            Ships <code>hachure.org/v1</code> as an in-toto <code>predicateType</code>,
+            inheriting <strong>DSSE signing and the cosign toolchain</strong>.
+            Consumes SLSA provenance as evidence on claims about software deliverables.
+          </p>
+        </article>
+
+        <article class="interop-item" role="listitem">
+          <span class="interop-standard">OpenTelemetry</span>
+          <p class="interop-role">
+            References OTel trace IDs from evidence records so "show the work" drills into what the agent executed.
+            Emits trust-status changes as <strong>OTel events</strong> so status appears in existing dashboards.
+            Does not build a tracing SDK.
+          </p>
+        </article>
+
+        <article class="interop-item" role="listitem">
+          <span class="interop-standard">SARIF</span>
+          <p class="interop-role">
+            First-class SARIF consumer: each run becomes a batch of evidence events
+            (tool identity → authority trace; fingerprint → claim correlation).
+            Optionally emits SARIF so trust status surfaces inside <strong>GitHub code scanning UIs</strong>.
+          </p>
+        </article>
+
+        <article class="interop-item" role="listitem">
+          <span class="interop-standard">C2PA</span>
+          <p class="interop-role">
+            Consumes C2PA manifests as a <strong>high-grade evidence class</strong> on Hachure claims.
+            Adds the lifecycle after the signature: post-hoc verification, status that evolves,
+            contestation. C2PA is frozen at signing time; Hachure status is recomputed from accumulating testimony.
+          </p>
+        </article>
+
+        <article class="interop-item" role="listitem">
+          <span class="interop-standard">W3C VCs 2.0</span>
+          <p class="interop-role">
+            Emits verification events as <strong>VCs signed by the verifying authority</strong>.
+            Publishes a JSON-LD context so <code>hachure.org/v1</code> documents carry PROV-O terms
+            for semantic-web interop.
+          </p>
+        </article>
+
+        <article class="interop-item" role="listitem">
+          <span class="interop-standard">Sigstore / Rekor</span>
+          <p class="interop-role">
+            Anchors testimony log entries in Rekor or a Tessera-based log for
+            <strong>third-party append-only witnessing</strong>.
+            Inherits keyless certs from Fulcio via the cosign toolchain.
+          </p>
+        </article>
+
+        <article class="interop-item" role="listitem">
+          <span class="interop-standard">EU AI Act</span>
+          <p class="interop-role">
+            Positions the testimony log as an <strong>Article 12/19-grade logging substrate</strong>:
+            append-only integrity is a strictly better story than mutable logs when facing
+            market-surveillance authorities.
+          </p>
+        </article>
+
+        <article class="interop-item" role="listitem">
+          <span class="interop-standard">OTel GenAI</span>
+          <p class="interop-role">
+            Maps <code>gen_ai.agent.*</code> and MCP attributes into authority traces.
+            Turns selected telemetry into durable, signed, disputable testimony.
+            <strong>Observability is not inspectability</strong> — OTel describes what happened; Hachure records what was verified.
+          </p>
+        </article>
+
+      </div>
+
+    </section>
+
+    <!-- ============================================================
+         STATUS / FOOTER BLOCK
+         ============================================================ -->
+    <footer class="status-footer site-wrapper reveal" role="contentinfo" id="status">
+
+      <div class="status-footer-grid">
+
+        <div>
+          <p class="footer-col-title">Format Status</p>
+          <div class="footer-col-body">
+            <span class="status-badge">pre-1.0</span>
+            <p>
+              Namespace <code>hachure.org/v1</code> · Hard versioning, no compatibility promises yet.
+              Version bumps are reflected in <code>schemaVersion</code> (currently <code>3</code>)
+              and in <code>STATUS_FUNCTION_VERSION</code> (currently <code>"1"</code>).
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-col-title">Specification &amp; Implementation</p>
+          <div class="footer-col-body">
+            <p>
+              Spec and reference implementation at
+              <a href="https://github.com/kontourai/surface" target="_blank" rel="noopener noreferrer">
+                github.com/kontourai/surface ↗
+              </a>
+              — <code>spec/</code> directory for now. Reference implementation: <code>@kontourai/surface</code>.
+            </p>
+            <p>
+              Conformance test vectors in <code>spec/conformance/</code> make the specification executable.
+              An independent implementation can prove agreement without touching any Kontour product.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <p class="footer-col-title">Governance</p>
+          <div class="footer-col-body">
+            <p>
+              Originally developed by
+              <a href="https://kontourai.io" target="_blank" rel="noopener noreferrer">Kontour AI ↗</a>,
+              which holds the name to protect it.
+            </p>
+            <p>
+              The format is deliberately not named after any company or product.
+              Producers outside the Kontour suite can emit and consume these records without adopting a vendor name
+              into their wire format.
+            </p>
+            <p>
+              Governance intent: moving to neutral governance as adoption warrants.
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="site-footer-base">
+        <p class="footer-base-left">
+          hachure.org &nbsp;·&nbsp;
+          <a href="https://github.com/kontourai/surface" target="_blank" rel="noopener noreferrer">GitHub</a>
+          &nbsp;·&nbsp;
+          <a href="https://kontourai.io" target="_blank" rel="noopener noreferrer">Kontour AI</a>
+        </p>
+        <p class="footer-base-right">
+          Open format &nbsp;·&nbsp; Assert · Observe · Resolve
+        </p>
+      </div>
+
+    </footer>
+
+  </main>
+
+  <!-- Scroll-reveal -->
+  <script>
+    (function () {
+      if (!('IntersectionObserver' in window)) return;
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08 });
+      document.querySelectorAll('.reveal').forEach(function (el) {
+        observer.observe(el);
+      });
+    }());
+  </script>
+
+</body>
+</html>

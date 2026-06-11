@@ -1,0 +1,3 @@
+# Redirect alternate domains to canonical hachure.org
+https://hachure.dev/* https://hachure.org/:splat 301
+https://www.hachure.org/* https://hachure.org/:splat 301
