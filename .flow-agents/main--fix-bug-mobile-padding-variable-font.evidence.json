@@ -1,0 +1,50 @@
+{
+  "verdict": "pass",
+  "checks": [
+    {
+      "name": "diff scope",
+      "status": "pass",
+      "command": "git diff --stat",
+      "summary": "Production changes are limited to styles.css and trust.html; .flow-agents contains verification artifacts."
+    },
+    {
+      "name": "static server home",
+      "status": "pass",
+      "command": "python3 -m http.server 8765; curl -I http://127.0.0.1:8765/",
+      "summary": "Home page returned HTTP/1.0 200 OK."
+    },
+    {
+      "name": "static server trust",
+      "status": "pass",
+      "command": "python3 -m http.server 8765; curl -I http://127.0.0.1:8765/trust.html",
+      "summary": "Trust page returned HTTP/1.0 200 OK."
+    },
+    {
+      "name": "html parser home",
+      "status": "pass",
+      "command": "python3 -m html.parser index.html",
+      "summary": "Parser completed without errors."
+    },
+    {
+      "name": "html parser trust",
+      "status": "pass",
+      "command": "python3 -m html.parser trust.html",
+      "summary": "Parser completed without errors."
+    },
+    {
+      "name": "css static assertions",
+      "status": "pass",
+      "command": "python3 -c '<static CSS/HTML assertions>'",
+      "summary": "Confirmed wrapper gutter, block-only layout padding, prose code inheritance, and explicit monospace exceptions."
+    },
+    {
+      "name": "browser visual checks",
+      "status": "not_verified",
+      "command": "find . -maxdepth 3 '(' -name package.json -o -name 'playwright.config.*' -o -path './node_modules/playwright' -o -path './node_modules/@playwright/test' ')'",
+      "summary": "No local Playwright CLI/package/config was available for mobile screenshots or computed-style viewport checks."
+    }
+  ],
+  "not_verified_gaps": [
+    "Mobile screenshots and real browser computed-style/overflow checks were not collected because browser automation tooling is absent from this static site checkout."
+  ]
+}

@@ -97,7 +97,7 @@ body::after {
    ============================================================ */
 
 .site-header {
-  padding: 2rem 0 1.5rem;
+  padding-block: 2rem 1.5rem;
   border-bottom: var(--rule);
   display: flex;
   align-items: baseline;
@@ -149,7 +149,7 @@ body::after {
 
 .hero {
   position: relative;
-  padding: 3rem 0 0;
+  padding-block-start: 3rem;
   overflow: hidden;
 }
 
@@ -301,7 +301,7 @@ body::after {
    ============================================================ */
 
 .section {
-  padding: 4rem 0;
+  padding-block: 4rem;
   border-bottom: var(--rule);
 }
 
@@ -692,7 +692,7 @@ body::after {
    ============================================================ */
 
 .status-footer {
-  padding: 3.5rem 0 2.5rem;
+  padding-block: 3.5rem 2.5rem;
 }
 
 .status-footer-grid {
@@ -943,6 +943,7 @@ a {
 }
 
 code {
-  font-family: var(--font-mono);
+  font-family: inherit;
+  font-size: 0.95em;
+  overflow-wrap: anywhere;
 }
-

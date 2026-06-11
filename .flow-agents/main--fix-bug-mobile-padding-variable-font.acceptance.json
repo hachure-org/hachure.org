@@ -1,0 +1,120 @@
+{
+  "definition_of_done": "On mobile widths, all main content, header, sections, cards/grids, trust page content, and footers retain a readable left/right gutter; inline variable names inside prose read as part of the body text while intentionally technical UI labels/formulas can remain monospace; desktop layout and existing visual identity remain unchanged.",
+  "criteria": [
+    {
+      "id": "mobile-gutters-home",
+      "status": "pass",
+      "description": "At 375px and 390px viewport widths, header, hero, sections, grids/cards, and footer on / have non-zero left/right gutter and text does not touch the viewport edge.",
+      "evidence_expected": "Playwright screenshot or computed-style evidence for .site-header.site-wrapper, .hero.site-wrapper, .section.site-wrapper, and .status-footer.site-wrapper.",
+      "evidence_refs": [
+        {
+          "kind": "source",
+          "file": "styles.css",
+          "line_start": 89,
+          "line_end": 92,
+          "excerpt": ".site-wrapper keeps padding: 0 var(--gutter)"
+        },
+        {
+          "kind": "source",
+          "file": "styles.css",
+          "line_start": 99,
+          "line_end": 100,
+          "excerpt": ".site-header uses padding-block only"
+        },
+        {
+          "kind": "source",
+          "file": "styles.css",
+          "line_start": 150,
+          "line_end": 152,
+          "excerpt": ".hero uses padding-block-start only"
+        },
+        {
+          "kind": "source",
+          "file": "styles.css",
+          "line_start": 303,
+          "line_end": 304,
+          "excerpt": ".section uses padding-block only"
+        },
+        {
+          "kind": "source",
+          "file": "styles.css",
+          "line_start": 694,
+          "line_end": 695,
+          "excerpt": ".status-footer uses padding-block only"
+        }
+      ]
+    },
+    {
+      "id": "mobile-gutters-trust",
+      "status": "pass",
+      "description": "At 375px and 390px viewport widths, trust page intro, trust panel host, JSON link, recompute note, and footer retain readable left/right gutter.",
+      "evidence_expected": "Playwright screenshot or computed-style evidence on /trust.html.",
+      "evidence_refs": [
+        {
+          "kind": "source",
+          "file": "trust.html",
+          "line_start": 116,
+          "line_end": 116,
+          "excerpt": "header uses site-header site-wrapper"
+        },
+        {
+          "kind": "source",
+          "file": "trust.html",
+          "line_start": 134,
+          "line_end": 134,
+          "excerpt": "trust section uses section site-wrapper"
+        },
+        {
+          "kind": "source",
+          "file": "trust.html",
+          "line_start": 187,
+          "line_end": 187,
+          "excerpt": "footer uses status-footer site-wrapper"
+        }
+      ]
+    },
+    {
+      "id": "inline-code-prose",
+      "status": "pass",
+      "description": "Inline schema field names and variable names inside prose no longer render in IBM Plex Mono, while formulas and technical UI labels remain monospace.",
+      "evidence_expected": "Computed font-family checks for prose code examples and .status-formula code, plus screenshot review.",
+      "evidence_refs": [
+        {
+          "kind": "source",
+          "file": "styles.css",
+          "line_start": 945,
+          "line_end": 948,
+          "excerpt": "global inline code inherits font family"
+        },
+        {
+          "kind": "source",
+          "file": "trust.html",
+          "line_start": 26,
+          "line_end": 33,
+          "excerpt": ".trust-intro code inherits font family"
+        },
+        {
+          "kind": "source",
+          "file": "trust.html",
+          "line_start": 100,
+          "line_end": 107,
+          "excerpt": ".recompute-note code inherits font family"
+        },
+        {
+          "kind": "source",
+          "file": "styles.css",
+          "line_start": 444,
+          "line_end": 448,
+          "excerpt": ".status-formula code remains monospace"
+        }
+      ]
+    },
+    {
+      "id": "no-mobile-overflow",
+      "status": "not_verified",
+      "description": "No horizontal overflow is introduced on / or /trust.html at common mobile widths.",
+      "evidence_expected": "Browser check comparing documentElement.scrollWidth to clientWidth at 375px and 390px.",
+      "not_verified_reason": "No local Playwright CLI, package.json, node_modules Playwright package, or Playwright config is present in this checkout, so browser viewport overflow checks were unavailable."
+    }
+  ]
+}
