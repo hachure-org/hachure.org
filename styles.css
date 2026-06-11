@@ -152,6 +152,16 @@ body::after {
   color: var(--red);
 }
 
+.external-arrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.68em;
+  line-height: 1;
+  margin-left: 0.18em;
+  position: relative;
+  top: -0.08em;
+}
+
 /* ============================================================
    HERO
    ============================================================ */
@@ -312,6 +322,10 @@ body::after {
 .section {
   padding-block: 4rem;
   border-bottom: var(--rule);
+}
+
+#verbs {
+  scroll-margin-top: 2rem;
 }
 
 .section:last-of-type {
@@ -896,35 +910,28 @@ body::after {
 
 @media (max-width: 600px) {
   :root {
-    --sticky-header-offset: 7rem;
+    --sticky-header-offset: 7.25rem;
   }
 
   body::before, body::after { display: none; }
 
   .site-header {
-    padding-block: 1rem 0.9rem;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding-block: 0.9rem 0.8rem;
   }
 
   .site-nav {
-    flex-wrap: nowrap;
-    gap: 1rem;
-    max-width: 100%;
-    overflow-x: auto;
-    padding-bottom: 0.25rem;
-    scrollbar-color: var(--ink-faint) transparent;
-    scrollbar-width: thin;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.35rem 0.75rem;
+    width: 100%;
   }
 
-  .site-nav::-webkit-scrollbar {
-    height: 3px;
-  }
-
-  .site-nav::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .site-nav::-webkit-scrollbar-thumb {
-    background: var(--ink-faint);
+  .site-nav a {
+    font-size: 0.62rem;
+    line-height: 1.25;
+    white-space: nowrap;
   }
 
   .status-footer-grid {
