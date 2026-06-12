@@ -143,6 +143,9 @@ function assembleResponse(requestedRefs, index) {
     metadata: {
       respondedAt: new Date().toISOString(),
       statusFunctionVersion: index.statusFunctionVersion,
+      // Static bundle server — version reflects generation time, not live evaluation.
+      // See verification-endpoint.md §Response shape, "statusFunctionVersion source".
+      evaluatedAt: 'generation',
       requestedRefs,
       unknownRefs,
       assurance: 'producer-asserted (unsigned)',

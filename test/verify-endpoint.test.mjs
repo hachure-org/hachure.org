@@ -140,6 +140,7 @@ function assembleResponse(requestedRefs, index) {
     metadata: {
       respondedAt: new Date().toISOString(),
       statusFunctionVersion: index.statusFunctionVersion,
+      evaluatedAt: 'generation',
       requestedRefs,
       unknownRefs,
       assurance: 'producer-asserted (unsigned)',
@@ -353,7 +354,7 @@ await test('Response body includes required metadata keys', async () => {
   const ctx = makeContext('GET', `https://hachure.org${VERIFY_PATH}?ref=${encodeURIComponent(KNOWN_CLAIM_ID)}`);
   const res = await onRequest(ctx);
   const body = await res.json();
-  const required = ['respondedAt', 'statusFunctionVersion', 'requestedRefs', 'unknownRefs'];
+  const required = ['respondedAt', 'statusFunctionVersion', 'evaluatedAt', 'requestedRefs', 'unknownRefs'];
   for (const key of required) {
     assert(key in body.metadata, `metadata.${key} missing`);
   }
@@ -365,6 +366,15 @@ await test('statusFunctionVersion is "1" (from claim.value in bundle)', async ()
   const body = await res.json();
   assert(body.metadata.statusFunctionVersion === '1', 
     `expected "1" got "${body.metadata.statusFunctionVersion}"`);
+});
+
+
+await test('metadata.evaluatedAt is "generation" (static bundle server)', async () => {
+  const ctx = makeContext('GET', `https://hachure.org${VERIFY_PATH}?ref=${encodeURIComponent(KNOWN_CLAIM_ID)}`);
+  const res = await onRequest(ctx);
+  const body = await res.json();
+  assert(body.metadata.evaluatedAt === 'generation',
+    `expected "generation" got "${body.metadata.evaluatedAt}"`);
 });
 
 // Summary
