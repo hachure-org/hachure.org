@@ -175,7 +175,7 @@
       <a href="/#recompute">§ Recompute</a>
       <a href="/#records">§ Records</a>
       <a href="/#interop">§ Interop</a>
-      <a href="/trust.html" aria-current="page">§ Receipts</a>
+      <a href="/trust" aria-current="page">§ Receipts</a>
       <a href="https://github.com/hachure-org/spec" target="_blank" rel="noopener noreferrer">GitHub <span class="external-arrow" aria-hidden="true">↗</span><span class="sr-only"> opens external site</span></a>
     </nav>
   </header>
@@ -242,9 +242,22 @@
         The signed release assets for <strong>v0.11.0</strong> are also available:
         <a href="https://github.com/kontourai/surface/releases/download/v0.11.0/trust-bundle.dsse.json" target="_blank" rel="noopener noreferrer"><code>trust-bundle.dsse.json</code> <span class="external-arrow" aria-hidden="true">↗</span><span class="sr-only"> opens external site</span></a>
         and
-        <a href="https://github.com/kontourai/surface/releases/download/v0.11.0/trust-bundle.sigstore.json" target="_blank" rel="noopener noreferrer"><code>trust-bundle.sigstore.json</code> <span class="external-arrow" aria-hidden="true">↗</span><span class="sr-only"> opens external site</span></a>
-        — verify the DSSE envelope with
-        <code>cosign verify-blob --bundle trust-bundle.sigstore.json trust-bundle.dsse.json</code>.
+        <a href="https://github.com/kontourai/surface/releases/download/v0.11.0/trust-bundle.sigstore.json" target="_blank" rel="noopener noreferrer"><code>trust-bundle.sigstore.json</code> <span class="external-arrow" aria-hidden="true">↗</span><span class="sr-only"> opens external site</span></a>.
+        The in-toto statement inside the DSSE binds <code>trust-bundle.json</code>
+        to a Fulcio certificate for
+        <code>publish-npm.yml@refs/tags/v0.11.0</code>.
+        Digest binding is inspectable today:
+        <div class="verify-curl">curl -sL https://github.com/kontourai/surface/releases/download/v0.11.0/trust-bundle.dsse.json \
+  | python3 -c 'import json,base64,sys; e=json.load(sys.stdin); p=json.loads(base64.b64decode(e["payload"])); print(p["subject"][0]["digest"]["sha256"])'
+# → 4989c6b30ac5d0fddbf0d69e0249d6d2c9f6a3b1fbc416ecd546987da1775318
+# shasum -a 256 trust-bundle.json  ← must match</div>
+        Full <code>cosign verify-blob</code> is pending a signing fix in surface
+        (payloadType incompatibility with cosign v3). When fixed, the command will be:
+        <div class="verify-curl">cosign verify-blob \
+  --bundle trust-bundle.sigstore.json \
+  --certificate-identity "https://github.com/kontourai/surface/.github/workflows/publish-npm.yml@refs/tags/v0.11.0" \
+  --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+  trust-bundle.dsse.json</div>
         Live query example:
         <div class="verify-curl">curl 'https://hachure.org/.well-known/hachure/verify?ref=claim.release.test-suite-passes'</div>
       </div>
