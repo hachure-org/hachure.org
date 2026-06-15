@@ -243,7 +243,9 @@ console.log('\nRunning verify-endpoint tests against real bundle...\n');
 
 // Known claim IDs for assertions
 const KNOWN_CLAIM_ID = 'claim.release.test-suite-passes';
-const KNOWN_INTEGRITY_REF = 'git:5446610e8245f1051bb4964353266d1b65b27bad';
+// Tracks the published trust/latest-bundle.json (the release git commit). Update
+// alongside trust/ when refreshing the bundle for a new surface release.
+const KNOWN_INTEGRITY_REF = 'git:d1f071bf48aae0d15fd0995edaed75ce4f2ad1b9';
 const UNKNOWN_REF = 'sha256:deadbeefdeadbeefdeadbeefdeadbeef00000000000000000000000000000000';
 
 await test('GET known ref (claim id) returns 200 with matching claim', async () => {
