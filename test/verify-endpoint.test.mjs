@@ -243,9 +243,20 @@ console.log('\nRunning verify-endpoint tests against real bundle...\n');
 
 // Known claim IDs for assertions
 const KNOWN_CLAIM_ID = 'claim.release.test-suite-passes';
-// Tracks the published trust/latest-bundle.json (the release git commit). Update
-// alongside trust/ when refreshing the bundle for a new surface release.
-const KNOWN_INTEGRITY_REF = 'git:d1f071bf48aae0d15fd0995edaed75ce4f2ad1b9';
+// Derived from the live bundle, not hard-coded: the integrity ref (e.g. the
+// release git commit) changes every release. Pick the non-claim-id ref shared
+// by the most claims — that is what the "multiple claims share a ref" test needs.
+const KNOWN_INTEGRITY_REF = (() => {
+  const { refToClaimIds } = buildIndex(bundle);
+  let best = null;
+  let bestCount = 1;
+  for (const [ref, claimIds] of refToClaimIds) {
+    if (ref.startsWith('claim.')) continue; // skip claim-id self-references
+    if (claimIds.size > bestCount) { best = ref; bestCount = claimIds.size; }
+  }
+  if (!best) throw new Error('verify-endpoint test fixture: no integrity ref shared by multiple claims in trust/latest-bundle.json');
+  return best;
+})();
 const UNKNOWN_REF = 'sha256:deadbeefdeadbeefdeadbeefdeadbeef00000000000000000000000000000000';
 
 await test('GET known ref (claim id) returns 200 with matching claim', async () => {
