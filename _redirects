@@ -1,3 +1,8 @@
 # Redirect alternate domains to canonical hachure.org
 https://hachure.dev/* https://hachure.org/:splat 301
 https://www.hachure.org/* https://hachure.org/:splat 301
+
+# Make schema $id URLs dereferenceable: the normative schemas ship in the
+# `hachure` npm package; proxying to unpkg@latest keeps these always in sync
+# with the published release with zero copies to drift.
+/schemas/* https://unpkg.com/hachure@latest/schemas/:splat 302
