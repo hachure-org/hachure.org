@@ -166,6 +166,15 @@ export async function onRequest(context) {
   const { request, env } = context;
   const url = new URL(request.url);
 
+  // Schema $id dereferencing: every normative schema's $id lives under
+  // https://hachure.org/schemas/. The files ship in the `hachure` npm package;
+  // a real 302 (not the ASSETS-wrapped HTML interstitial) to unpkg@latest
+  // keeps them in lockstep with the published release with no copies to drift.
+  if (url.pathname.startsWith('/schemas/') && url.pathname.endsWith('.json')) {
+    const target = 'https://unpkg.com/hachure@latest/schemas/' + url.pathname.slice('/schemas/'.length);
+    return Response.redirect(target, 302);
+  }
+
   // Only handle the verify path; pass everything else through to static assets.
   if (url.pathname !== VERIFY_PATH) {
     return env.ASSETS.fetch(request);

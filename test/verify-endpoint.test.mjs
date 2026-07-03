@@ -198,6 +198,14 @@ await test('PUT returns 405', async () => {
   assert(res.status === 405, `status ${res.status}`);
 });
 
+await test('Schema $id URLs 302 to unpkg for the published package', async () => {
+  const ctx = makeContext('GET', 'https://hachure.org/schemas/trust-bundle.schema.json');
+  const res = await onRequest(ctx);
+  assert(res.status === 302, `status ${res.status}`);
+  const loc = res.headers.get('location');
+  assert(loc === 'https://unpkg.com/hachure@latest/schemas/trust-bundle.schema.json', `location ${loc}`);
+});
+
 await test('Non-verify path passes through to ASSETS', async () => {
   const ctx = makeContext('GET', 'https://hachure.org/trust/latest.json');
   // Should call ASSETS — our mock returns 404 for non-bundle paths, which is fine
