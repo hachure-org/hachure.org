@@ -2,21 +2,23 @@
  * Local test harness for the Pages function.
  * Mimics the env.ASSETS interface used in Cloudflare Workers runtime.
  * Run with: node test/verify-endpoint.test.mjs
+ *
+ * Imports the real module from functions/[[path]].js — no duplicated copy of
+ * the endpoint logic lives here.
  */
 
-import { readFileSync, existsSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
+import { readFileSync } from 'node:fs';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const BUNDLE_PATH = join(__dirname, '../trust/latest-bundle.json');
+const FUNCTION_PATH = join(__dirname, '../functions/[[path]].js');
 
-// ---------------------------------------------------------------------------
-// Inline the function logic (Workers runtime — no Node requires inside)
-// We re-import it by reading the file and using a data URL eval approach.
-// Since the function uses `export async function onRequest`, we need to
-// adapt it to run locally.
-// ---------------------------------------------------------------------------
+const { onRequest, buildIndex } = await import(pathToFileURL(FUNCTION_PATH).href);
+
+const SOURCE = 'hachure-org-site';
+const VERIFY_PATH = '/.well-known/hachure/verify';
 
 // Read the bundle once
 const bundleBytes = readFileSync(BUNDLE_PATH, 'utf-8');
@@ -36,172 +38,6 @@ const mockAssets = {
     return { ok: false, status: 404 };
   }
 };
-
-// ---------------------------------------------------------------------------
-// Inline the core function logic so we test the real code, not a copy.
-// We load the module via dynamic import after patching it into a data URL.
-// ---------------------------------------------------------------------------
-const SOURCE = 'hachure-org-site';
-const VERIFY_PATH = '/.well-known/hachure/verify';
-
-function buildIndex(bundle) {
-  const refToClaimIds = new Map();
-  function addRef(ref, claimId) {
-    if (!ref || typeof ref !== 'string') return;
-    if (!refToClaimIds.has(ref)) refToClaimIds.set(ref, new Set());
-    refToClaimIds.get(ref).add(claimId);
-  }
-  for (const claim of bundle.claims || []) {
-    const cid = claim.id;
-    addRef(cid, cid);
-    addRef(claim.integrityRef, cid);
-    addRef(claim.currentIntegrityRef, cid);
-    const ia = claim.integrityAnchor || claim.currentIntegrityAnchor;
-    if (ia) {
-      if (typeof ia === 'string') addRef(ia, cid);
-      else if (ia && typeof ia.value === 'string') addRef(ia.value, cid);
-    }
-  }
-  const evidenceByClaimId = new Map();
-  for (const ev of bundle.evidence || []) {
-    if (!ev.claimId) continue;
-    if (!evidenceByClaimId.has(ev.claimId)) evidenceByClaimId.set(ev.claimId, []);
-    evidenceByClaimId.get(ev.claimId).push(ev);
-    addRef(ev.integrityRef, ev.claimId);
-    const ia = ev.integrityAnchor;
-    if (ia) {
-      if (typeof ia === 'string') addRef(ia, ev.claimId);
-      else if (ia && typeof ia.value === 'string') addRef(ia.value, ev.claimId);
-    }
-  }
-  const eventsByClaimId = new Map();
-  for (const event of bundle.events || []) {
-    if (!event.claimId) continue;
-    if (!eventsByClaimId.has(event.claimId)) eventsByClaimId.set(event.claimId, []);
-    eventsByClaimId.get(event.claimId).push(event);
-  }
-  const authorityTraceByClaimId = new Map();
-  for (const at of bundle.authorityTrace || []) {
-    const cid = at.claimId || at.id;
-    if (!cid) continue;
-    if (!authorityTraceByClaimId.has(cid)) authorityTraceByClaimId.set(cid, []);
-    authorityTraceByClaimId.get(cid).push(at);
-  }
-  let statusFunctionVersion = '1';
-  for (const claim of bundle.claims || []) {
-    if (claim.fieldOrBehavior === 'statusFunctionVersion' && claim.value) {
-      statusFunctionVersion = String(claim.value);
-      break;
-    }
-  }
-  return {
-    refToClaimIds,
-    claimsById: Object.fromEntries((bundle.claims || []).map(c => [c.id, c])),
-    evidenceByClaimId,
-    eventsByClaimId,
-    authorityTraceByClaimId,
-    statusFunctionVersion,
-    source: bundle.source || SOURCE,
-  };
-}
-
-function assembleResponse(requestedRefs, index) {
-  const unknownRefs = [];
-  const matchedClaimIds = new Set();
-  for (const ref of requestedRefs) {
-    const cids = index.refToClaimIds.get(ref);
-    if (!cids || cids.size === 0) {
-      unknownRefs.push(ref);
-    } else {
-      for (const cid of cids) matchedClaimIds.add(cid);
-    }
-  }
-  const claims = [];
-  const evidence = [];
-  const events = [];
-  const authorityTrace = [];
-  for (const cid of matchedClaimIds) {
-    const claim = index.claimsById[cid];
-    if (claim) claims.push(claim);
-    const evs = index.evidenceByClaimId.get(cid) || [];
-    evidence.push(...evs);
-    const evts = index.eventsByClaimId.get(cid) || [];
-    events.push(...evts);
-    const ats = index.authorityTraceByClaimId.get(cid) || [];
-    authorityTrace.push(...ats);
-  }
-  return {
-    schemaVersion: 3,
-    source: SOURCE,
-    claims,
-    evidence,
-    events,
-    authorityTrace,
-    metadata: {
-      respondedAt: new Date().toISOString(),
-      statusFunctionVersion: index.statusFunctionVersion,
-      evaluatedAt: 'generation',
-      requestedRefs,
-      unknownRefs,
-      assurance: 'producer-asserted (unsigned)',
-    },
-  };
-}
-
-async function onRequest(context) {
-  const { request, env } = context;
-  const url = new URL(request.url);
-  if (url.pathname !== VERIFY_PATH) {
-    return env.ASSETS.fetch(request);
-  }
-  if (request.method !== 'GET' && request.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json', 'Allow': 'GET, POST' },
-    });
-  }
-  let requestedRefs = [];
-  if (request.method === 'GET') {
-    requestedRefs = url.searchParams.getAll('ref');
-  } else {
-    let body;
-    try { body = await request.json(); } catch (e) {
-      return jsonError(400, 'Invalid JSON body');
-    }
-    if (!Array.isArray(body && body.refs)) {
-      return jsonError(400, 'Body must be { "refs": [...] }');
-    }
-    requestedRefs = body.refs;
-  }
-  if (requestedRefs.length === 0) {
-    return jsonError(400, 'At least one ref is required');
-  }
-  for (const ref of requestedRefs) {
-    if (typeof ref !== 'string') return jsonError(400, 'All refs must be strings');
-  }
-  let bundleData;
-  try {
-    const bundleUrl = new URL('/trust/latest-bundle.json', request.url);
-    const resp = await env.ASSETS.fetch(new Request(bundleUrl.toString()));
-    if (!resp.ok) return jsonError(500, 'Failed to load trust bundle: HTTP ' + resp.status);
-    bundleData = await resp.json();
-  } catch (err) {
-    return jsonError(500, 'Failed to load trust bundle: ' + err.message);
-  }
-  const index = buildIndex(bundleData);
-  const responseBody = assembleResponse(requestedRefs, index);
-  return new Response(JSON.stringify(responseBody, null, 2), {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
-
-function jsonError(status, message) {
-  return new Response(JSON.stringify({ error: message }), {
-    status,
-    headers: { 'Content-Type': 'application/json' },
-  });
-}
 
 // ---------------------------------------------------------------------------
 // Test helpers
@@ -241,21 +77,29 @@ function makeContext(method, url, bodyObj) {
 // ---------------------------------------------------------------------------
 console.log('\nRunning verify-endpoint tests against real bundle...\n');
 
-// Known claim IDs for assertions
-const KNOWN_CLAIM_ID = 'claim.release.test-suite-passes';
-// Derived from the live bundle, not hard-coded: the integrity ref (e.g. the
-// release git commit) changes every release. Pick the non-claim-id ref shared
+// Known claim IDs for assertions — derived from the live bundle, not
+// hard-coded, so the suite survives bundle regeneration.
+const KNOWN_CLAIM_ID = bundle.claims[0].id;
+// The integrity ref changes every release. Pick the non-claim-id ref shared
 // by the most claims — that is what the "multiple claims share a ref" test needs.
 const KNOWN_INTEGRITY_REF = (() => {
+  const claimIds = new Set(bundle.claims.map((c) => c.id));
   const { refToClaimIds } = buildIndex(bundle);
   let best = null;
   let bestCount = 1;
-  for (const [ref, claimIds] of refToClaimIds) {
-    if (ref.startsWith('claim.')) continue; // skip claim-id self-references
-    if (claimIds.size > bestCount) { best = ref; bestCount = claimIds.size; }
+  for (const [ref, refClaimIds] of refToClaimIds) {
+    if (claimIds.has(ref)) continue; // skip claim-id self-references
+    if (refClaimIds.size > bestCount) { best = ref; bestCount = refClaimIds.size; }
   }
   if (!best) throw new Error('verify-endpoint test fixture: no integrity ref shared by multiple claims in trust/latest-bundle.json');
   return best;
+})();
+// The bundle's own declared versions — the endpoint must echo these, not
+// assert newer ones (the endpoint relays producer records verbatim).
+const BUNDLE_SCHEMA_VERSION = bundle.schemaVersion;
+const BUNDLE_SFV = (() => {
+  const c = (bundle.claims || []).find(c => c.fieldOrBehavior === 'statusFunctionVersion' && c.value);
+  return c ? String(c.value) : '1';
 })();
 const UNKNOWN_REF = 'sha256:deadbeefdeadbeefdeadbeefdeadbeef00000000000000000000000000000000';
 
@@ -272,7 +116,15 @@ await test('GET known ref (claim id) returns 200 with matching claim', async () 
   assert(body.metadata.requestedRefs.includes(KNOWN_CLAIM_ID), 'requestedRefs missing');
   assert(typeof body.metadata.respondedAt === 'string', 'respondedAt missing');
   assert(typeof body.metadata.statusFunctionVersion === 'string', 'statusFunctionVersion missing');
-  assert(body.metadata.statusFunctionVersion === '1', 'statusFunctionVersion should be "1"');
+  assert(body.metadata.statusFunctionVersion === BUNDLE_SFV, `statusFunctionVersion should be "${BUNDLE_SFV}"`);
+});
+
+await test('Response schemaVersion echoes the served bundle', async () => {
+  const ctx = makeContext('GET', `https://hachure.org${VERIFY_PATH}?ref=${encodeURIComponent(KNOWN_CLAIM_ID)}`);
+  const res = await onRequest(ctx);
+  const body = await res.json();
+  assert(body.schemaVersion === BUNDLE_SCHEMA_VERSION,
+    `expected schemaVersion ${BUNDLE_SCHEMA_VERSION}, got ${body.schemaVersion}`);
 });
 
 await test('GET known integrityRef returns 200 with multiple claims', async () => {
@@ -373,12 +225,12 @@ await test('Response body includes required metadata keys', async () => {
   }
 });
 
-await test('statusFunctionVersion is "1" (from claim.value in bundle)', async () => {
+await test('statusFunctionVersion comes from claim.value in bundle', async () => {
   const ctx = makeContext('GET', `https://hachure.org${VERIFY_PATH}?ref=${encodeURIComponent(KNOWN_CLAIM_ID)}`);
   const res = await onRequest(ctx);
   const body = await res.json();
-  assert(body.metadata.statusFunctionVersion === '1', 
-    `expected "1" got "${body.metadata.statusFunctionVersion}"`);
+  assert(body.metadata.statusFunctionVersion === BUNDLE_SFV,
+    `expected "${BUNDLE_SFV}" got "${body.metadata.statusFunctionVersion}"`);
 });
 
 

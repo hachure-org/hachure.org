@@ -3,9 +3,9 @@
  * Routes GET/POST /.well-known/hachure/verify per the hachure.org/v1
  * verification-endpoint profile.
  *
- * This is a SECOND, independent implementation of the profile — it does NOT
- * import @kontourai/surface. Self-containedness is proof the spec is
- * implementable from its text alone.
+ * This is an independent implementation of the profile, written from the
+ * spec's text alone with no implementation library imported —
+ * self-containedness is proof the profile is implementable from its text.
  *
  * Assurance level: L0 — unsigned, producer-asserted.
  */
@@ -18,7 +18,7 @@ const SOURCE = 'hachure-org-site';
 // The spec says: index claims by id + every integrityRef / integrityAnchor
 // value found on claims/evidence.
 // ---------------------------------------------------------------------------
-function buildIndex(bundle) {
+export function buildIndex(bundle) {
   // Map: ref-string => Set of claim IDs whose claim or associated evidence
   // carries that ref.
   const refToClaimIds = new Map();
@@ -78,7 +78,9 @@ function buildIndex(bundle) {
 
   // Derive statusFunctionVersion from the bundle.
   // The release script records it in the claim whose fieldOrBehavior is
-  // 'statusFunctionVersion'. If absent, fall back to "1" per task instructions.
+  // 'statusFunctionVersion'. With evaluatedAt: "generation" the reported
+  // version reflects the bundle's generation time (verification-endpoint.md
+  // §Response shape); "1" is the fallback for bundles predating that claim.
   let statusFunctionVersion = '1';
   for (const claim of bundle.claims || []) {
     if (claim.fieldOrBehavior === 'statusFunctionVersion' && claim.value) {
@@ -94,6 +96,7 @@ function buildIndex(bundle) {
     eventsByClaimId,
     authorityTraceByClaimId,
     statusFunctionVersion,
+    schemaVersion: bundle.schemaVersion,
     source: bundle.source || SOURCE,
   };
 }
@@ -101,7 +104,7 @@ function buildIndex(bundle) {
 // ---------------------------------------------------------------------------
 // Response assembler
 // ---------------------------------------------------------------------------
-function assembleResponse(requestedRefs, index) {
+export function assembleResponse(requestedRefs, index) {
   const unknownRefs = [];
   const matchedClaimIds = new Set();
 
@@ -134,7 +137,10 @@ function assembleResponse(requestedRefs, index) {
   }
 
   return {
-    schemaVersion: 3,
+    // Echo the served bundle's declared schemaVersion — the endpoint relays
+    // producer records verbatim, so the response must not claim a newer schema
+    // than the bundle it serves.
+    schemaVersion: index.schemaVersion,
     source: SOURCE,
     claims,
     evidence,

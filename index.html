@@ -158,7 +158,7 @@
           </p>
 
           <div class="status-formula">
-            <span class="formula-label">Status Derivation — <code>statusFunctionVersion = "1"</code></span>
+            <span class="formula-label">Status Derivation — <code>statusFunctionVersion = "2"</code></span>
             <code>status = f(claim, evidence, events, policy, authority, now)</code>
           </div>
 
@@ -168,8 +168,8 @@
             certificates and Sigstore made for builds, applied to claims about work.
           </p>
 
-          <div class="status-list" aria-label="Eight possible status values">
-            <p class="status-list-title">Eight possible statuses</p>
+          <div class="status-list" aria-label="Nine possible status values">
+            <p class="status-list-title">Nine possible statuses</p>
             <table class="status-table">
               <tbody>
                 <tr>
@@ -204,6 +204,10 @@
                   <td><span class="status-dot dot-rejected" aria-hidden="true"></span><code>rejected</code></td>
                   <td>A terminal event marks the claim as rejected.</td>
                 </tr>
+                <tr>
+                  <td><span class="status-dot dot-revoked" aria-hidden="true"></span><code>revoked</code></td>
+                  <td>An explicit invalidation event has revoked the claim's verification; single-claim derivation folds it to <code>stale</code> unless a later event re-verifies.</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -214,15 +218,18 @@
           <h3>The spec is executable.</h3>
 
           <p>
-            <code>spec/conformance/</code> contains test vector bundles with expected per-claim statuses
-            at a fixed <code>now</code>, covering commit-scoped verification, duration-based staleness,
-            blocking-evidence disputes, and authority-gated resolution.
+            The spec repo's <code>conformance/</code> directory contains test vector bundles with expected
+            per-claim statuses at a fixed <code>now</code>, covering commit-scoped verification,
+            duration-based staleness, blocking-evidence disputes, authority-gated resolution,
+            freshness expiry, revocation, and multi-producer merge.
           </p>
 
           <p>
-            The test at <code>tests/spec-conformance.test.ts</code> loads every test vector and asserts
-            that the reference implementation derives the expected statuses. An independent implementation
-            can run the same test vectors without touching any Kontour product.
+            A machine-readable manifest (<code>conformanceManifest</code> in the
+            <code>hachure</code> npm package) indexes what an implementation must pass to claim
+            conformance at each level: L1 schema-valid records, L2 status-derivation vectors,
+            L3 merge vectors. An independent implementation can run the vectors with nothing
+            but the spec package itself.
           </p>
 
           <p>
@@ -232,8 +239,8 @@
 
           <div class="mono-note" role="note">
             Namespace: <strong>hachure.org/v1</strong><br />
-            schemaVersion: <strong>3</strong><br />
-            statusFunctionVersion: <strong>"1"</strong>
+            schemaVersion: <strong>6</strong><br />
+            statusFunctionVersion: <strong>"2"</strong>
           </div>
 
           <p style="margin-top: 1.25rem; font-size: 0.83rem; color: var(--ink-light); line-height: 1.65;">
@@ -271,7 +278,8 @@
           <p class="record-desc">
             The central wire record. A portable, point-in-time package of trust state from a single producer:
             claims, evidence, policies, verification events, and optional identity links, claim groups, and authority traces.
-            Bundles from multiple producers can be merged; conflicts surface as <code>disputed</code> status — never last-write-wins.
+            Bundles from multiple producers can be merged without last-write-wins and without deleting losing evidence;
+            conflicting claims surface as <code>contradiction</code> transparency gaps, never silently resolved.
           </p>
         </article>
 
@@ -279,8 +287,9 @@
           <p class="record-name">Claim</p>
           <p class="record-desc">
             An assertion about a real-world subject. Stable <code>id</code>, <code>subjectType</code> / <code>subjectId</code>,
-            <code>claimType</code>, <code>fieldOrBehavior</code>, <code>value</code>.
-            Carries optional <code>impactLevel</code>, integrity anchors, policy references, and derivation edges.
+            <code>claimType</code>, <code>fieldOrBehavior</code>, <code>value</code>, and an optional <code>facet</code> grouping.
+            Carries optional <code>impactLevel</code>, freshness (<code>expiresAt</code> / <code>ttlSeconds</code>),
+            integrity anchors, policy references, and derivation edges.
           </p>
         </article>
 
@@ -410,6 +419,15 @@
         </article>
 
         <article class="interop-item" role="listitem">
+          <span class="interop-standard">IETF SCITT</span>
+          <p class="interop-role">
+            Registers bundles (or their DSSE envelopes) as <strong>SCITT signed statements</strong>;
+            the receipt lands in the bundle's proof block as a transparency-log anchor.
+            SCITT proves a statement was made; Hachure keeps deriving what its claims are worth as time passes.
+          </p>
+        </article>
+
+        <article class="interop-item" role="listitem">
           <span class="interop-standard">Sigstore / Rekor</span>
           <p class="interop-role">
             Anchors testimony log entries in Rekor or a Tessera-based log for
@@ -453,8 +471,8 @@
             <span class="status-badge">pre-1.0</span>
             <p>
               Namespace <code>hachure.org/v1</code> · Hard versioning, no compatibility promises yet.
-              Version bumps are reflected in <code>schemaVersion</code> (currently <code>3</code>)
-              and in <code>statusFunctionVersion</code> (currently <code>"1"</code>).
+              Version bumps are reflected in <code>schemaVersion</code> (currently <code>6</code>)
+              and in <code>statusFunctionVersion</code> (currently <code>"2"</code>).
             </p>
           </div>
         </div>
@@ -476,9 +494,11 @@
             <p>
               The spec includes optional profiles: an
               <strong>in-toto/DSSE wrapping profile</strong> for signed bundles,
-              and a <strong>producer verification endpoint</strong> — ask any
+              a <strong>producer verification endpoint</strong> — ask any
               producer whether a record is still valid and get fresh testimony
-              back for your own recomputation.
+              back for your own recomputation — and an <strong>assurance
+              profile</strong> that treats signing as a dial (L0 unsigned,
+              L1 keyless, L2 held-key) rather than a precondition.
               Profiles are at
               <a href="https://github.com/hachure-org/spec" target="_blank" rel="noopener noreferrer">
                 github.com/hachure-org/spec <span class="external-arrow" aria-hidden="true">↗</span><span class="sr-only"> opens external site</span>
@@ -496,9 +516,9 @@
               which holds the name to protect it.
             </p>
             <p>
-              The format is deliberately not named after any company or product.
-              Producers outside the Kontour suite can emit and consume these records without adopting a vendor name
-              into their wire format.
+              The format is deliberately not named after any company or product, and depends on
+              no vendor's software: any producer can emit and consume these records without
+              adopting a vendor name into their wire format.
             </p>
             <p>
               Governance intent: moving to neutral governance as adoption warrants.
@@ -511,7 +531,7 @@
       <div class="site-footer-base">
         <p class="footer-base-left">
           hachure.org &nbsp;·&nbsp;
-          <a href="https://github.com/hachure-org/spec" target="_blank" rel="noopener noreferrer">Spec</a> · <a href="https://github.com/kontourai/surface" target="_blank" rel="noopener noreferrer">Reference implementation</a>
+          <a href="https://github.com/hachure-org/spec" target="_blank" rel="noopener noreferrer">Spec</a> · <a href="https://github.com/hachure-org/spec#implementations" target="_blank" rel="noopener noreferrer">Implementations</a>
           &nbsp;·&nbsp;
           <a href="https://kontourai.io" target="_blank" rel="noopener noreferrer">Kontour AI</a>
         </p>

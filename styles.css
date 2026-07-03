@@ -550,6 +550,7 @@ body::after {
 .dot-disputed    { background: #A0522D; }
 .dot-superseded  { background: var(--ink-light); }
 .dot-rejected    { background: var(--ink-mid); }
+.dot-revoked     { background: #703030; }
 
 /* Conformance block (right column) */
 .conformance-aside {

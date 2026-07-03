@@ -1,23 +1,22 @@
-// <surface-trust-panel> — a dependency-free, read-only Trust Panel custom element.
+// <hachure-trust-panel> — a dependency-free, read-only Trust Panel custom element.
 //
-// Renders a derived Kontour Surface TrustReport (the output of `surface report`
-// or `buildTrustReport`) so a viewer can inspect claims, evidence, freshness,
+// Renders a derived Hachure TrustReport (the report output of any conforming
+// implementation) so a viewer can inspect claims, evidence, freshness,
 // and transparency gaps before relying on them. The element never mutates or
-// re-derives trust state; it only displays what the kernel derived.
+// re-derives trust state; it only displays what the producer derived.
 //
-// The compiled dist/src/trust-panel/surface-trust-panel.js is a self-contained
-// ES module with no imports — load it with <script type="module">. It reads
-// untrusted pasted JSON, so the local shapes below stay loose and every
-// rendered value is escaped.
+// This is a self-contained ES module with no imports — load it with
+// <script type="module">. It reads untrusted pasted JSON, so the local shapes
+// below stay loose and every rendered value is escaped.
 //
 // Usage:
-//   <script type="module" src="surface-trust-panel.js"></script>
-//   <surface-trust-panel></surface-trust-panel>
-//   document.querySelector("surface-trust-panel").report = reportJson;
+//   <script type="module" src="hachure-trust-panel.js"></script>
+//   <hachure-trust-panel></hachure-trust-panel>
+//   document.querySelector("hachure-trust-panel").report = reportJson;
 // or
-//   <surface-trust-panel src="./report.json"></surface-trust-panel>
+//   <hachure-trust-panel src="./report.json"></hachure-trust-panel>
 (() => {
-    if (typeof customElements === "undefined" || customElements.get("surface-trust-panel"))
+    if (typeof customElements === "undefined" || customElements.get("hachure-trust-panel"))
         return;
     const STATUS_LABELS = {
         unknown: "No evidence",
@@ -28,6 +27,7 @@
         disputed: "Disputed",
         superseded: "Superseded",
         rejected: "Rejected",
+        revoked: "Revoked",
     };
     const STATUS_KIND = {
         verified: "positive",
@@ -38,6 +38,7 @@
         unknown: "neutral",
         proposed: "neutral",
         assumed: "caution",
+        revoked: "negative",
     };
     const PANEL_CSS = `
     :host {
@@ -99,7 +100,7 @@
     .error { color: var(--k-negative, #c24141); }
     .footnote { margin: 0.8rem 0 0; color: var(--k-text-muted, #657267); font-size: 0.75rem; }
   `;
-    class SurfaceTrustPanel extends HTMLElement {
+    class HachureTrustPanel extends HTMLElement {
         static get observedAttributes() {
             return ["src"];
         }
@@ -159,7 +160,7 @@
             }
             const claims = report.claims;
             if (claims.length > 0 && claims.every((claim) => !claim.status)) {
-                this.#renderError("This looks like a TrustBundle rather than a derived report. Run `surface report --input <file>` first, then load the report output.");
+                this.#renderError("This looks like a TrustBundle rather than a derived report. Build a report from it first (any conforming implementation), then load the report output.");
                 return;
             }
             const counts = new Map();
@@ -201,7 +202,7 @@
           <dl>
             <dt>Value</dt><dd>${escapeHtml(formatValue(claim.value))}</dd>
             <dt>Claim</dt><dd>${escapeHtml(asText(claim.id))}</dd>
-            <dt>Surface</dt><dd>${escapeHtml(asText(claim.surface))}</dd>
+            <dt>Facet</dt><dd>${escapeHtml(asText(claim.facet ?? claim.surface))}</dd>
             <dt>Impact</dt><dd>${escapeHtml(asText(claim.impactLevel, "unspecified"))}</dd>
             ${claim.verificationPolicyId ? `<dt>Policy</dt><dd>${escapeHtml(asText(claim.verificationPolicyId))}</dd>` : ""}
           </dl>
@@ -238,6 +239,6 @@
             .replaceAll(">", "&gt;")
             .replaceAll('"', "&quot;");
     }
-    customElements.define("surface-trust-panel", SurfaceTrustPanel);
+    customElements.define("hachure-trust-panel", HachureTrustPanel);
 })();
 export {};

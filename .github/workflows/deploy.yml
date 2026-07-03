@@ -31,9 +31,16 @@ jobs:
           assert "hachure-org/spec" in html, "spec link missing"
           assert "npm i -D hachure" in html, "npm install missing"
           assert "STATUS_FUNCTION_VERSION" not in html, "stale constant casing"
-          assert html.count("kontourai/surface") == 1, "reference impl must appear exactly once"
+          assert html.count("kontourai/surface") <= 1, "no single implementation may be promoted on the landing page"
           print("validation passed")
           PY
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verification endpoint tests
+        run: node test/verify-endpoint.test.mjs
+      - name: Version drift gate (advertised vs published spec)
+        run: node scripts/check-version-drift.mjs
 
   deploy:
     name: Deploy to Cloudflare Pages
