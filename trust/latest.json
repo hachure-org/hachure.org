@@ -6,61 +6,61 @@
     {
       "id": "hachure-spec.release.test-suite-passes",
       "subjectType": "npm-package",
-      "subjectId": "hachure@0.10.2",
+      "subjectId": "hachure@0.11.0",
       "facet": "hachure-spec.self",
       "claimType": "release-quality",
       "fieldOrBehavior": "test-suite-passes",
       "value": true,
-      "createdAt": "2026-07-04T05:08:24.142Z",
-      "updatedAt": "2026-07-04T05:08:24.142Z",
+      "createdAt": "2026-07-04T16:54:19.560Z",
+      "updatedAt": "2026-07-04T16:54:19.560Z",
       "impactLevel": "high",
       "verificationPolicyId": "hachure-spec.policy.test",
-      "currentIntegrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
+      "currentIntegrityRef": "npm-pack:sha512-GmUpXHqqBxu9rU+3jfoSGfqh7PgGNQJfH/HZAc5sUaKKNuh1jCkRub2ydW2Xgm59mALXoiIy6Pu8in9L2ruJUA==",
       "status": "verified"
     },
     {
       "id": "hachure-spec.release.conformance-self-derivation",
       "subjectType": "npm-package",
-      "subjectId": "hachure@0.10.2",
+      "subjectId": "hachure@0.11.0",
       "facet": "hachure-spec.self",
       "claimType": "release-quality",
       "fieldOrBehavior": "bundled-implementation-derives-all-vectors",
       "value": true,
-      "createdAt": "2026-07-04T05:08:24.142Z",
-      "updatedAt": "2026-07-04T05:08:24.142Z",
+      "createdAt": "2026-07-04T16:54:19.560Z",
+      "updatedAt": "2026-07-04T16:54:19.560Z",
       "impactLevel": "high",
       "verificationPolicyId": "hachure-spec.policy.conformance",
-      "currentIntegrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
+      "currentIntegrityRef": "npm-pack:sha512-GmUpXHqqBxu9rU+3jfoSGfqh7PgGNQJfH/HZAc5sUaKKNuh1jCkRub2ydW2Xgm59mALXoiIy6Pu8in9L2ruJUA==",
       "status": "verified"
     },
     {
       "id": "hachure-spec.release.status-function-version",
       "subjectType": "npm-package",
-      "subjectId": "hachure@0.10.2",
+      "subjectId": "hachure@0.11.0",
       "facet": "hachure-spec.self",
       "claimType": "release-quality",
       "fieldOrBehavior": "statusFunctionVersion",
       "value": "2",
-      "createdAt": "2026-07-04T05:08:24.142Z",
-      "updatedAt": "2026-07-04T05:08:24.142Z",
+      "createdAt": "2026-07-04T16:54:19.560Z",
+      "updatedAt": "2026-07-04T16:54:19.560Z",
       "impactLevel": "high",
       "verificationPolicyId": "hachure-spec.policy.identity",
-      "currentIntegrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
+      "currentIntegrityRef": "npm-pack:sha512-GmUpXHqqBxu9rU+3jfoSGfqh7PgGNQJfH/HZAc5sUaKKNuh1jCkRub2ydW2Xgm59mALXoiIy6Pu8in9L2ruJUA==",
       "status": "verified"
     },
     {
       "id": "hachure-spec.release.package-identity",
       "subjectType": "npm-package",
-      "subjectId": "hachure@0.10.2",
+      "subjectId": "hachure@0.11.0",
       "facet": "hachure-spec.self",
       "claimType": "release-quality",
       "fieldOrBehavior": "package-integrity",
-      "value": "sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
-      "createdAt": "2026-07-04T05:08:24.142Z",
-      "updatedAt": "2026-07-04T05:08:24.142Z",
+      "value": "sha512-GmUpXHqqBxu9rU+3jfoSGfqh7PgGNQJfH/HZAc5sUaKKNuh1jCkRub2ydW2Xgm59mALXoiIy6Pu8in9L2ruJUA==",
+      "createdAt": "2026-07-04T16:54:19.560Z",
+      "updatedAt": "2026-07-04T16:54:19.560Z",
       "impactLevel": "high",
       "verificationPolicyId": "hachure-spec.policy.identity",
-      "currentIntegrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
+      "currentIntegrityRef": "npm-pack:sha512-GmUpXHqqBxu9rU+3jfoSGfqh7PgGNQJfH/HZAc5sUaKKNuh1jCkRub2ydW2Xgm59mALXoiIy6Pu8in9L2ruJUA==",
       "status": "verified"
     }
   ],
@@ -71,10 +71,10 @@
       "evidenceType": "test_output",
       "method": "validation",
       "sourceRef": "scripts/self-trust-bundle.mjs",
-      "excerptOrSummary": "node --test: tests 154, pass 154, fail 0",
-      "observedAt": "2026-07-04T05:08:24.142Z",
+      "excerptOrSummary": "node --test: tests 163, pass 163, fail 0",
+      "observedAt": "2026-07-04T16:54:19.560Z",
       "collectedBy": "hachure-spec.self-attestation",
-      "integrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
+      "integrityRef": "npm-pack:sha512-GmUpXHqqBxu9rU+3jfoSGfqh7PgGNQJfH/HZAc5sUaKKNuh1jCkRub2ydW2Xgm59mALXoiIy6Pu8in9L2ruJUA==",
       "passing": true,
       "blocking": true,
       "supportStrength": "entails"
@@ -86,9 +86,9 @@
       "method": "validation",
       "sourceRef": "scripts/self-trust-bundle.mjs",
       "excerptOrSummary": "sf-authority-resolved: pass; sf-disputed-blocking: pass; sf-expired-window: pass; sf-no-freshness-fields: pass; sf-reference-bundle-snapshot: pass; sf-revoked-event: pass; sf-stale-duration: pass; sf-verified-commit: pass",
-      "observedAt": "2026-07-04T05:08:24.142Z",
+      "observedAt": "2026-07-04T16:54:19.560Z",
       "collectedBy": "hachure-spec.self-attestation",
-      "integrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
+      "integrityRef": "npm-pack:sha512-GmUpXHqqBxu9rU+3jfoSGfqh7PgGNQJfH/HZAc5sUaKKNuh1jCkRub2ydW2Xgm59mALXoiIy6Pu8in9L2ruJUA==",
       "passing": true,
       "blocking": true,
       "supportStrength": "entails"
@@ -100,9 +100,9 @@
       "method": "extraction",
       "sourceRef": "scripts/self-trust-bundle.mjs",
       "excerptOrSummary": "index.mjs exports statusFunctionVersion = \"2\"",
-      "observedAt": "2026-07-04T05:08:24.142Z",
+      "observedAt": "2026-07-04T16:54:19.560Z",
       "collectedBy": "hachure-spec.self-attestation",
-      "integrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
+      "integrityRef": "npm-pack:sha512-GmUpXHqqBxu9rU+3jfoSGfqh7PgGNQJfH/HZAc5sUaKKNuh1jCkRub2ydW2Xgm59mALXoiIy6Pu8in9L2ruJUA==",
       "passing": true,
       "blocking": true,
       "supportStrength": "entails"
@@ -113,10 +113,10 @@
       "evidenceType": "calculation_trace",
       "method": "anchoring",
       "sourceRef": "scripts/self-trust-bundle.mjs",
-      "excerptOrSummary": "npm pack --dry-run integrity: sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
-      "observedAt": "2026-07-04T05:08:24.142Z",
+      "excerptOrSummary": "npm pack --dry-run integrity: sha512-GmUpXHqqBxu9rU+3jfoSGfqh7PgGNQJfH/HZAc5sUaKKNuh1jCkRub2ydW2Xgm59mALXoiIy6Pu8in9L2ruJUA==",
+      "observedAt": "2026-07-04T16:54:19.560Z",
       "collectedBy": "hachure-spec.self-attestation",
-      "integrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
+      "integrityRef": "npm-pack:sha512-GmUpXHqqBxu9rU+3jfoSGfqh7PgGNQJfH/HZAc5sUaKKNuh1jCkRub2ydW2Xgm59mALXoiIy6Pu8in9L2ruJUA==",
       "passing": true,
       "blocking": true,
       "supportStrength": "entails"
@@ -199,8 +199,8 @@
       "evidenceIds": [
         "hachure-spec.evidence.test-output"
       ],
-      "createdAt": "2026-07-04T05:08:24.142Z",
-      "verifiedAt": "2026-07-04T05:08:24.142Z"
+      "createdAt": "2026-07-04T16:54:19.560Z",
+      "verifiedAt": "2026-07-04T16:54:19.560Z"
     },
     {
       "id": "hachure-spec.event.conformance",
@@ -211,8 +211,8 @@
       "evidenceIds": [
         "hachure-spec.evidence.vector-results"
       ],
-      "createdAt": "2026-07-04T05:08:24.142Z",
-      "verifiedAt": "2026-07-04T05:08:24.142Z"
+      "createdAt": "2026-07-04T16:54:19.560Z",
+      "verifiedAt": "2026-07-04T16:54:19.560Z"
     },
     {
       "id": "hachure-spec.event.sfv",
@@ -223,8 +223,8 @@
       "evidenceIds": [
         "hachure-spec.evidence.sfv"
       ],
-      "createdAt": "2026-07-04T05:08:24.142Z",
-      "verifiedAt": "2026-07-04T05:08:24.142Z"
+      "createdAt": "2026-07-04T16:54:19.560Z",
+      "verifiedAt": "2026-07-04T16:54:19.560Z"
     },
     {
       "id": "hachure-spec.event.identity",
@@ -235,12 +235,12 @@
       "evidenceIds": [
         "hachure-spec.evidence.pack-integrity"
       ],
-      "createdAt": "2026-07-04T05:08:24.142Z",
-      "verifiedAt": "2026-07-04T05:08:24.142Z"
+      "createdAt": "2026-07-04T16:54:19.560Z",
+      "verifiedAt": "2026-07-04T16:54:19.560Z"
     }
   ],
-  "id": "hachure-spec-1783141705391",
-  "generatedAt": "2026-07-04T05:08:24.142Z",
+  "id": "hachure-spec-1783184060209",
+  "generatedAt": "2026-07-04T16:54:19.560Z",
   "statusFunctionVersion": "2",
   "summary": {
     "byStatus": {

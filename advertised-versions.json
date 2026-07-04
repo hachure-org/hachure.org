@@ -1,6 +1,6 @@
 {
   "comment": "The versions this site publicly advertises. CI (scripts/check-version-drift.mjs) fails if site copy disagrees with this file, or if this file falls behind the latest published `hachure` npm package. Update deliberately: bump here, then sweep index.html/trust.html copy to match.",
-  "hachureNpmVersion": "0.10.2",
+  "hachureNpmVersion": "0.11.0",
   "schemaVersion": 6,
   "statusFunctionVersion": "2"
 }

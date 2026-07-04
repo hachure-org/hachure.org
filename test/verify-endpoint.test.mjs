@@ -250,6 +250,29 @@ await test('metadata.evaluatedAt is "generation" (static bundle server)', async 
     `expected "generation" got "${body.metadata.evaluatedAt}"`);
 });
 
+await test('nonce echo: GET nonce is echoed byte-for-byte in metadata', async () => {
+  const ctx = makeContext('GET', `https://hachure.org${VERIFY_PATH}?ref=${encodeURIComponent(KNOWN_CLAIM_ID)}&nonce=abc-123_XYZ`);
+  const res = await onRequest(ctx);
+  assert(res.status === 200, `status ${res.status}`);
+  const body = await res.json();
+  assert(body.metadata.nonce === 'abc-123_XYZ', `nonce echo mismatch: ${body.metadata.nonce}`);
+});
+
+await test('nonce echo: POST body nonce is echoed; absent nonce yields no metadata.nonce', async () => {
+  const withNonce = await onRequest(makeContext('POST', `https://hachure.org${VERIFY_PATH}`, { refs: [KNOWN_CLAIM_ID], nonce: 'n-1' }));
+  const b1 = await withNonce.json();
+  assert(b1.metadata.nonce === 'n-1', 'POST nonce must be echoed');
+  const without = await onRequest(makeContext('GET', `https://hachure.org${VERIFY_PATH}?ref=${encodeURIComponent(KNOWN_CLAIM_ID)}`));
+  const b2 = await without.json();
+  assert(!('nonce' in b2.metadata), 'metadata.nonce MUST be omitted when the request carried none');
+});
+
+await test('nonce validation: over-length nonce returns 400', async () => {
+  const long = 'x'.repeat(129);
+  const res = await onRequest(makeContext('GET', `https://hachure.org${VERIFY_PATH}?ref=${encodeURIComponent(KNOWN_CLAIM_ID)}&nonce=${long}`));
+  assert(res.status === 400, `status ${res.status}`);
+});
+
 // Summary
 console.log(`\nResults: ${passed} passed, ${failed} failed`);
 if (failed > 0) {

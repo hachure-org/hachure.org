@@ -104,7 +104,7 @@ export function buildIndex(bundle) {
 // ---------------------------------------------------------------------------
 // Response assembler
 // ---------------------------------------------------------------------------
-export function assembleResponse(requestedRefs, index) {
+export function assembleResponse(requestedRefs, index, nonce) {
   const unknownRefs = [];
   const matchedClaimIds = new Set();
 
@@ -148,6 +148,9 @@ export function assembleResponse(requestedRefs, index) {
     authorityTrace,
     metadata: {
       respondedAt: new Date().toISOString(),
+      // Replay-resistance echo (verification-endpoint.md §"Replay resistance"):
+      // present iff the request carried a nonce, byte-for-byte.
+      ...(nonce !== undefined ? { nonce } : {}),
       statusFunctionVersion: index.statusFunctionVersion,
       // Static bundle server — version reflects generation time, not live evaluation.
       // See verification-endpoint.md §Response shape, "statusFunctionVersion source".
@@ -192,11 +195,13 @@ export async function onRequest(context) {
     });
   }
 
-  // Parse requested refs
+  // Parse requested refs (and optional replay-resistance nonce)
   let requestedRefs = [];
+  let nonce;
 
   if (request.method === 'GET') {
     requestedRefs = url.searchParams.getAll('ref');
+    nonce = url.searchParams.get('nonce') ?? undefined;
   } else {
     // POST — parse JSON body
     let body;
@@ -209,6 +214,11 @@ export async function onRequest(context) {
       return jsonError(400, 'Body must be { "refs": [...] }');
     }
     requestedRefs = body.refs;
+    if (body.nonce !== undefined) nonce = body.nonce;
+  }
+
+  if (nonce !== undefined && (typeof nonce !== 'string' || nonce.length < 1 || nonce.length > 128)) {
+    return jsonError(400, 'nonce must be a string of 1-128 characters');
   }
 
   // 400 if no refs provided
@@ -237,7 +247,7 @@ export async function onRequest(context) {
   }
 
   const index = buildIndex(bundle);
-  const responseBody = assembleResponse(requestedRefs, index);
+  const responseBody = assembleResponse(requestedRefs, index, nonce);
 
   return new Response(JSON.stringify(responseBody, null, 2), {
     status: 200,
