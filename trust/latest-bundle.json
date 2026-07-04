@@ -6,58 +6,58 @@
     {
       "id": "hachure-spec.release.test-suite-passes",
       "subjectType": "npm-package",
-      "subjectId": "hachure@0.10.1",
+      "subjectId": "hachure@0.10.2",
       "facet": "hachure-spec.self",
       "claimType": "release-quality",
       "fieldOrBehavior": "test-suite-passes",
       "value": true,
-      "createdAt": "2026-07-03T19:21:17.509Z",
-      "updatedAt": "2026-07-03T19:21:17.509Z",
+      "createdAt": "2026-07-04T05:08:24.142Z",
+      "updatedAt": "2026-07-04T05:08:24.142Z",
       "impactLevel": "high",
       "verificationPolicyId": "hachure-spec.policy.test",
-      "currentIntegrityRef": "npm-pack:sha512-cCplHhzk+4AOL9HPFaN5mrH9kg1WJbtGqLPa7PjlBJDTqw33FzNLLwMO2eC8R9nLUsuA4067tPiU87+ppYrQTQ=="
+      "currentIntegrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg=="
     },
     {
       "id": "hachure-spec.release.conformance-self-derivation",
       "subjectType": "npm-package",
-      "subjectId": "hachure@0.10.1",
+      "subjectId": "hachure@0.10.2",
       "facet": "hachure-spec.self",
       "claimType": "release-quality",
       "fieldOrBehavior": "bundled-implementation-derives-all-vectors",
       "value": true,
-      "createdAt": "2026-07-03T19:21:17.509Z",
-      "updatedAt": "2026-07-03T19:21:17.509Z",
+      "createdAt": "2026-07-04T05:08:24.142Z",
+      "updatedAt": "2026-07-04T05:08:24.142Z",
       "impactLevel": "high",
       "verificationPolicyId": "hachure-spec.policy.conformance",
-      "currentIntegrityRef": "npm-pack:sha512-cCplHhzk+4AOL9HPFaN5mrH9kg1WJbtGqLPa7PjlBJDTqw33FzNLLwMO2eC8R9nLUsuA4067tPiU87+ppYrQTQ=="
+      "currentIntegrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg=="
     },
     {
       "id": "hachure-spec.release.status-function-version",
       "subjectType": "npm-package",
-      "subjectId": "hachure@0.10.1",
+      "subjectId": "hachure@0.10.2",
       "facet": "hachure-spec.self",
       "claimType": "release-quality",
       "fieldOrBehavior": "statusFunctionVersion",
       "value": "2",
-      "createdAt": "2026-07-03T19:21:17.509Z",
-      "updatedAt": "2026-07-03T19:21:17.509Z",
+      "createdAt": "2026-07-04T05:08:24.142Z",
+      "updatedAt": "2026-07-04T05:08:24.142Z",
       "impactLevel": "high",
       "verificationPolicyId": "hachure-spec.policy.identity",
-      "currentIntegrityRef": "npm-pack:sha512-cCplHhzk+4AOL9HPFaN5mrH9kg1WJbtGqLPa7PjlBJDTqw33FzNLLwMO2eC8R9nLUsuA4067tPiU87+ppYrQTQ=="
+      "currentIntegrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg=="
     },
     {
       "id": "hachure-spec.release.package-identity",
       "subjectType": "npm-package",
-      "subjectId": "hachure@0.10.1",
+      "subjectId": "hachure@0.10.2",
       "facet": "hachure-spec.self",
       "claimType": "release-quality",
       "fieldOrBehavior": "package-integrity",
-      "value": "sha512-cCplHhzk+4AOL9HPFaN5mrH9kg1WJbtGqLPa7PjlBJDTqw33FzNLLwMO2eC8R9nLUsuA4067tPiU87+ppYrQTQ==",
-      "createdAt": "2026-07-03T19:21:17.509Z",
-      "updatedAt": "2026-07-03T19:21:17.509Z",
+      "value": "sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
+      "createdAt": "2026-07-04T05:08:24.142Z",
+      "updatedAt": "2026-07-04T05:08:24.142Z",
       "impactLevel": "high",
       "verificationPolicyId": "hachure-spec.policy.identity",
-      "currentIntegrityRef": "npm-pack:sha512-cCplHhzk+4AOL9HPFaN5mrH9kg1WJbtGqLPa7PjlBJDTqw33FzNLLwMO2eC8R9nLUsuA4067tPiU87+ppYrQTQ=="
+      "currentIntegrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg=="
     }
   ],
   "evidence": [
@@ -67,10 +67,10 @@
       "evidenceType": "test_output",
       "method": "validation",
       "sourceRef": "scripts/self-trust-bundle.mjs",
-      "excerptOrSummary": "node --test: tests 153, pass 153, fail 0",
-      "observedAt": "2026-07-03T19:21:17.509Z",
+      "excerptOrSummary": "node --test: tests 154, pass 154, fail 0",
+      "observedAt": "2026-07-04T05:08:24.142Z",
       "collectedBy": "hachure-spec.self-attestation",
-      "integrityRef": "npm-pack:sha512-cCplHhzk+4AOL9HPFaN5mrH9kg1WJbtGqLPa7PjlBJDTqw33FzNLLwMO2eC8R9nLUsuA4067tPiU87+ppYrQTQ==",
+      "integrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
       "passing": true,
       "blocking": true,
       "supportStrength": "entails"
@@ -82,9 +82,9 @@
       "method": "validation",
       "sourceRef": "scripts/self-trust-bundle.mjs",
       "excerptOrSummary": "sf-authority-resolved: pass; sf-disputed-blocking: pass; sf-expired-window: pass; sf-no-freshness-fields: pass; sf-reference-bundle-snapshot: pass; sf-revoked-event: pass; sf-stale-duration: pass; sf-verified-commit: pass",
-      "observedAt": "2026-07-03T19:21:17.509Z",
+      "observedAt": "2026-07-04T05:08:24.142Z",
       "collectedBy": "hachure-spec.self-attestation",
-      "integrityRef": "npm-pack:sha512-cCplHhzk+4AOL9HPFaN5mrH9kg1WJbtGqLPa7PjlBJDTqw33FzNLLwMO2eC8R9nLUsuA4067tPiU87+ppYrQTQ==",
+      "integrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
       "passing": true,
       "blocking": true,
       "supportStrength": "entails"
@@ -96,9 +96,9 @@
       "method": "extraction",
       "sourceRef": "scripts/self-trust-bundle.mjs",
       "excerptOrSummary": "index.mjs exports statusFunctionVersion = \"2\"",
-      "observedAt": "2026-07-03T19:21:17.509Z",
+      "observedAt": "2026-07-04T05:08:24.142Z",
       "collectedBy": "hachure-spec.self-attestation",
-      "integrityRef": "npm-pack:sha512-cCplHhzk+4AOL9HPFaN5mrH9kg1WJbtGqLPa7PjlBJDTqw33FzNLLwMO2eC8R9nLUsuA4067tPiU87+ppYrQTQ==",
+      "integrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
       "passing": true,
       "blocking": true,
       "supportStrength": "entails"
@@ -109,10 +109,10 @@
       "evidenceType": "calculation_trace",
       "method": "anchoring",
       "sourceRef": "scripts/self-trust-bundle.mjs",
-      "excerptOrSummary": "npm pack --dry-run integrity: sha512-cCplHhzk+4AOL9HPFaN5mrH9kg1WJbtGqLPa7PjlBJDTqw33FzNLLwMO2eC8R9nLUsuA4067tPiU87+ppYrQTQ==",
-      "observedAt": "2026-07-03T19:21:17.509Z",
+      "excerptOrSummary": "npm pack --dry-run integrity: sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
+      "observedAt": "2026-07-04T05:08:24.142Z",
       "collectedBy": "hachure-spec.self-attestation",
-      "integrityRef": "npm-pack:sha512-cCplHhzk+4AOL9HPFaN5mrH9kg1WJbtGqLPa7PjlBJDTqw33FzNLLwMO2eC8R9nLUsuA4067tPiU87+ppYrQTQ==",
+      "integrityRef": "npm-pack:sha512-0pM2RkYxEgjOpU5TAomhh0dVxqFSdhuRI3ZSG22rFIYQ4xE2D5agnKM3bjfRh4MqJVChlke4Vbe9XEGsOaQIVg==",
       "passing": true,
       "blocking": true,
       "supportStrength": "entails"
@@ -195,8 +195,8 @@
       "evidenceIds": [
         "hachure-spec.evidence.test-output"
       ],
-      "createdAt": "2026-07-03T19:21:17.509Z",
-      "verifiedAt": "2026-07-03T19:21:17.509Z"
+      "createdAt": "2026-07-04T05:08:24.142Z",
+      "verifiedAt": "2026-07-04T05:08:24.142Z"
     },
     {
       "id": "hachure-spec.event.conformance",
@@ -207,8 +207,8 @@
       "evidenceIds": [
         "hachure-spec.evidence.vector-results"
       ],
-      "createdAt": "2026-07-03T19:21:17.509Z",
-      "verifiedAt": "2026-07-03T19:21:17.509Z"
+      "createdAt": "2026-07-04T05:08:24.142Z",
+      "verifiedAt": "2026-07-04T05:08:24.142Z"
     },
     {
       "id": "hachure-spec.event.sfv",
@@ -219,8 +219,8 @@
       "evidenceIds": [
         "hachure-spec.evidence.sfv"
       ],
-      "createdAt": "2026-07-03T19:21:17.509Z",
-      "verifiedAt": "2026-07-03T19:21:17.509Z"
+      "createdAt": "2026-07-04T05:08:24.142Z",
+      "verifiedAt": "2026-07-04T05:08:24.142Z"
     },
     {
       "id": "hachure-spec.event.identity",
@@ -231,8 +231,8 @@
       "evidenceIds": [
         "hachure-spec.evidence.pack-integrity"
       ],
-      "createdAt": "2026-07-03T19:21:17.509Z",
-      "verifiedAt": "2026-07-03T19:21:17.509Z"
+      "createdAt": "2026-07-04T05:08:24.142Z",
+      "verifiedAt": "2026-07-04T05:08:24.142Z"
     }
   ]
 }

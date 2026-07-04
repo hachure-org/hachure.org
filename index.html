@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Hachure — An Open Trust Format</title>
-  <meta name="description" content="Hachure is an open format for portable trust state. Assert claims. Observe evidence, append-only. Resolve any question — with receipts, or an honest admission of none." />
+  <meta name="description" content="Hachure is an open format for recomputable trust state. Assert claims. Observe evidence, append-only. Resolve any question — status is a published function anyone can rerun, not a dashboard you have to trust." />
   <meta property="og:title" content="Hachure — An Open Trust Format" />
   <meta property="og:description" content="Status is a pure, versioned function: deterministic, recomputable by anyone. Namespace hachure.org/v1." />
   <meta property="og:type" content="website" />
@@ -155,6 +155,13 @@
             <code>now</code> timestamp. The same inputs and the same version must produce the same status
             in any conforming implementation. Asking you to trust a dashboard is not the same thing as
             publishing the function.
+          </p>
+
+          <p class="section-body">
+            This is the step every attestation standard leaves out. SCITT leaves registration policy
+            to each transparency service; EAT says verifier rules "are a matter of local policy";
+            W3C VCs say verification "does not imply evaluation of the truth of claims."
+            The status decision is always someone's unpublished local policy — Hachure publishes it.
           </p>
 
           <div class="status-formula">
