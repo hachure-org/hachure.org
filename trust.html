@@ -234,7 +234,7 @@
         Spec vectors: <a href="https://github.com/hachure-org/spec/tree/main/conformance" target="_blank" rel="noopener noreferrer">hachure-org/spec/conformance <span class="external-arrow" aria-hidden="true">↗</span><span class="sr-only"> opens external site</span></a>
       </p>
 
-      <div class="recompute-note" role="note">
+      <div class="recompute-note" role="note" id="recompute-demo">
         <strong>Recompute it yourself.</strong>
         Status is a pure, deterministic function of the bundle data and a <code>now</code>
         timestamp. Derive it from the raw bundle with the spec package alone:
@@ -250,7 +250,7 @@ npx hachure derive bundle.json</div>
         <strong>Verify it yourself — live endpoint.</strong>
         This site serves the
         <a href="https://github.com/hachure-org/spec/blob/main/verification-endpoint.md" target="_blank" rel="noopener noreferrer">hachure.org/v1 verification-endpoint profile <span class="external-arrow" aria-hidden="true">↗</span><span class="sr-only"> opens external site</span></a>
-        at <code>/.well-known/hachure/verify</code> — an independent implementation written
+        at <code>/.well-known/hachure/verify</code> — a from-scratch implementation written
         from the spec's text alone, proof the profile is implementable without any
         particular library.
         Live query example:

@@ -3,7 +3,7 @@
  * Routes GET/POST /.well-known/hachure/verify per the hachure.org/v1
  * verification-endpoint profile.
  *
- * This is an independent implementation of the profile, written from the
+ * This is a from-scratch implementation of the profile, written from the
  * spec's text alone with no implementation library imported —
  * self-containedness is proof the profile is implementable from its text.
  *

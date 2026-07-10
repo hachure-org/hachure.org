@@ -11,7 +11,7 @@
   <meta property="og:url" content="https://hachure.org/" />
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Hachure — An Open Trust Format" />
-  <meta name="twitter:description" content="Assert. Observe. Resolve. Status = f(claim, evidence, events, policy, authority, now)." />
+  <meta name="twitter:description" content="Assert. Observe. Resolve. Status = f(claim, evidence, events, policy, authorityTrace, now)." />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="stylesheet" href="/styles.css" />
 </head>
@@ -146,6 +146,12 @@
       </p>
       <h2 class="section-title" id="recompute-heading">Status is a pure function.<br>Run it yourself.</h2>
 
+      <p class="section-body" style="margin-bottom: 2rem;">
+        <strong>Walkthrough:</strong> <a href="/trust.html#recompute-demo">trust.html</a> links this
+        site's own raw bundle and walks you through recomputing its status yourself &mdash;
+        <code>curl &hellip; -o bundle.json</code> then <code>npx hachure derive bundle.json</code>.
+      </p>
+
       <div class="recompute-layout">
 
         <!-- Left: formula + status table -->
@@ -166,7 +172,7 @@
 
           <div class="status-formula">
             <span class="formula-label">Status Derivation — <code>statusFunctionVersion = "2"</code></span>
-            <code>status = f(claim, evidence, events, policy, authority, now)</code>
+            <code>status = f(claim, evidence, events, policy, authorityTrace, now)</code>
           </div>
 
           <p class="section-body">
@@ -371,11 +377,12 @@
       <h2 class="section-title" id="interop-heading">Plays nicely.<br>Invents nothing.</h2>
 
       <p class="interop-intro">
-        Hachure consumes and emits from existing standards as evidence.
+        Hachure consumes and emits from a growing set of standards as evidence.
         It invents no envelope, log, or identity scheme.
         The existing signing and attestation stacks do their job;
         Hachure adds the semantics above the signature — claims that evolve over time,
         a status function anyone can recompute, and authority-gated contestation that can change an outcome without mutating history.
+        Some integrations below ship today; others are planned profiles, marked inline.
       </p>
 
       <div class="interop-grid" role="list">
@@ -390,20 +397,20 @@
         </article>
 
         <article class="interop-item" role="listitem">
-          <span class="interop-standard">OpenTelemetry</span>
+          <span class="interop-standard">OpenTelemetry <em>&mdash; planned</em></span>
           <p class="interop-role">
-            References OTel trace IDs from evidence records so "show the work" drills into what the agent executed.
-            Emits trust-status changes as <strong>OTel events</strong> so status appears in existing dashboards.
-            Does not build a tracing SDK.
+            Planned: will reference OTel trace IDs from evidence records so "show the work" drills into what the agent executed.
+            Planned: will emit trust-status changes as <strong>OTel events</strong> so status appears in existing dashboards.
+            Won't build a tracing SDK.
           </p>
         </article>
 
         <article class="interop-item" role="listitem">
-          <span class="interop-standard">SARIF</span>
+          <span class="interop-standard">SARIF <em>&mdash; planned</em></span>
           <p class="interop-role">
-            First-class SARIF consumer: each run becomes a batch of evidence events
+            Planned profile: SARIF consumer &mdash; each run would become a batch of evidence events
             (tool identity → authority trace; fingerprint → claim correlation).
-            Optionally emits SARIF so trust status surfaces inside <strong>GitHub code scanning UIs</strong>.
+            Would optionally emit SARIF so trust status can surface inside <strong>GitHub code scanning UIs</strong>.
           </p>
         </article>
 
@@ -417,10 +424,10 @@
         </article>
 
         <article class="interop-item" role="listitem">
-          <span class="interop-standard">W3C VCs 2.0</span>
+          <span class="interop-standard">W3C VCs 2.0 <em>&mdash; planned</em></span>
           <p class="interop-role">
-            Emits verification events as <strong>VCs signed by the verifying authority</strong>.
-            Publishes a JSON-LD context so <code>hachure.org/v1</code> documents carry PROV-O terms
+            Planned profile: will emit verification events as <strong>VCs signed by the verifying authority</strong>.
+            Will publish a JSON-LD context so <code>hachure.org/v1</code> documents carry PROV-O terms
             for semantic-web interop.
           </p>
         </article>
@@ -444,19 +451,19 @@
         </article>
 
         <article class="interop-item" role="listitem">
-          <span class="interop-standard">EU AI Act</span>
+          <span class="interop-standard">EU AI Act <em>&mdash; positioning</em></span>
           <p class="interop-role">
-            Positions the testimony log as an <strong>Article 12/19-grade logging substrate</strong>:
+            Positioning, not a shipped profile &mdash; the testimony log as an <strong>Article 12/19-grade logging substrate</strong>:
             append-only integrity is a strictly better story than mutable logs when facing
             market-surveillance authorities.
           </p>
         </article>
 
         <article class="interop-item" role="listitem">
-          <span class="interop-standard">OTel GenAI</span>
+          <span class="interop-standard">OTel GenAI <em>&mdash; planned</em></span>
           <p class="interop-role">
-            Maps <code>gen_ai.agent.*</code> and MCP attributes into authority traces.
-            Turns selected telemetry into durable, signed, disputable testimony.
+            Planned profile: will map <code>gen_ai.agent.*</code> and MCP attributes into authority traces,
+            turning selected telemetry into durable, signed, disputable testimony.
             <strong>Observability is not inspectability</strong> — OTel describes what happened; Hachure records what was verified.
           </p>
         </article>
